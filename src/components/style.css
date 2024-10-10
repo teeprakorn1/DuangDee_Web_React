@@ -1,0 +1,109 @@
+
+
+.list-group a:hover{
+    background-color: rgb(220, 220, 223);
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* styles.css */
+.custom-navbar {
+    width: 100%; /* ปรับตามที่คุณต้องการ */
+    margin: 0 auto; /* จัดกลาง */
+    border-radius: 5px;
+}
+
+.radius-1{
+    border-radius: 5px;
+}
+
+.logout-link {
+    background-color: #dc3545; /* Red background color */
+    color: white; /* White text color */
+    font-weight: bold; /* Bold text */
+    border: none; /* Remove border */
+    text-align: center; /* Center text */
+    font-size: 1.1rem; /* Increase font size */
+    padding: 5px 5px; /* Adjust padding for height */
+    height: 40px; /* Optional: Set specific height */
+    line-height:30px; /* Center text vertically if using specific height */
+    width: 200px;
+}
+
+.logout-link:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.logout-link i {
+    font-size: 1.3rem; /* Increase icon size */
+}
+
+.custom-margin {
+    margin-bottom: 10px; /* Customize margin as needed */
+    border-radius: 5px;
+
+}
+.list-group-item {
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa; /* Light hover color */
+    transform: scale(1.02); /* Slight scaling effect on hover */
+}
+
+.logout-link {
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    font-weight: bold;
+}
+
+.logout-link:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Optional: Add some padding to the sidebar for better spacing */
+.sidebar {
+    padding: 20px;
+}
+
+.brand-name {
+    color: #343a40; /* Darker text color for brand name */
+}
+
+
+body {
+    background-color: #f8f9fa; /* พื้นหลังที่สบายตา */
+}
+
+h1 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.table {
+    border-radius: 0.5rem; /* ขอบมนของตาราง */
+    overflow: hidden; /* ซ่อนขอบที่ไม่ต้องการ */
+}
+
+.table-row:hover {
+    background-color: #e9ecef; /* สีพื้นหลังเมื่อมีการเลื่อนเมาส์ */
+    transition: background-color 0.2s; /* การเปลี่ยนสีอย่างราบรื่น */
+}
+
+.btn-warning {
+    background-color: #ffc107; /* สีพื้นหลังของปุ่มแก้ไข */
+    border: none; /* ไม่ต้องการขอบ */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* สีพื้นหลังของปุ่มลบ */
+    border: none; /* ไม่ต้องการขอบ */
+}
+
+.table th, .table td {
+    vertical-align: middle; /* จัดตำแหน่งให้ตรงกลาง */
+}
+
+
