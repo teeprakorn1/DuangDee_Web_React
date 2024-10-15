@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams } from 'react-router-dom';
+import './style.css';
 
 function Showdatacustomer() {
     const { id } = useParams(); // รับ ID จาก URL
@@ -62,94 +63,94 @@ function Showdatacustomer() {
             ) : error ? (
                 <p className="text-danger">{error}</p>
             ) : (
-                <div style={{ maxHeight: '550px', overflowY: 'auto' }}> {/* เพิ่ม scrollbar */}
+                <div style={{ maxHeight: '550px', overflowY: 'auto' }}>
                     <div className="mb-3">
                         <label className="form-label">User ID</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_ID}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Username</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_Username}
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label className="form-label" >Display Name</label>
-                        <div className="form-control"style={{ backgroundColor: '#e9ecef' }} >
+                        <label className="form-label">Display Name</label>
+                        <div className="form-control-custom">
                             {Users_DisplayName}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">First Name</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_FirstName}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Last Name</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_LastName}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Email</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_Email}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Phone</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_Phone}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Birth Date</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_BirthDate}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Registration Date</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_RegisDate}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Image File</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_ImageFile}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Google UID</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_Google_Uid}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Gender</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
-                            {UsersGender_ID === "1" ? "MALE" : UsersGender_ID === "2" ? "FEMALE" : "OTHER" }
+                        <div className="form-control-custom">
+                            {UsersGender_ID === "1" ? "MALE" : UsersGender_ID === "2" ? "FEMALE" : "OTHER"}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Registration Type ID</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {RegisType_Name}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">User Type ID</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {UsersType_Name}
                         </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Is Active</label>
-                        <div className="form-control" style={{ backgroundColor: '#e9ecef' }}>
+                        <div className="form-control-custom">
                             {Users_IsActive === "1" ? "Active" : "Suspended"}
                         </div>
                     </div>

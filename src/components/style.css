@@ -106,4 +106,17 @@ h1 {
     vertical-align: middle; /* จัดตำแหน่งให้ตรงกลาง */
 }
 
+/* styles.css */
+/* style.css */
+.form-control-custom {
+    background-color: #e9ecef;
+    height: 38px; /* ปรับความสูงให้เท่ากัน */
+    border: 1px solid #ced4da; /* ปรับขอบเพื่อให้สวยงาม */
+    border-radius: 0.25rem; /* ปรับความโค้งมุม */
+    padding: 0.375rem 0.75rem; /* ปรับ padding */
+    font-size: 1rem; /* ขนาดฟอนต์ */
+}
+
+
+
 
