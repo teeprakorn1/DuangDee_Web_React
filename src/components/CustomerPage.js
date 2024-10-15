@@ -11,7 +11,7 @@ function CustomerPage() {
     // ฟังก์ชันดึงข้อมูลลูกค้าจาก API
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('http://10.13.1.95:3000/api/get-profile');
+            const response = await axios.get('http://10.13.3.78:3000/api/get-profile');
             console.log("Fetched customers:", response.data); // ตรวจสอบข้อมูลที่ดึงมา
             setCustomers(response.data);
         } catch (error) {
@@ -61,7 +61,14 @@ function CustomerPage() {
                                         Edit
                                     </button>
 
-                                    <button className="btn btn-danger btn-sm">Show</button>
+                                    <button className="btn btn-danger btn-sm"
+                                    onClick={() => {
+                                        console.log("Navigate to data page:", `/data/${customer.Users_ID}`);
+                                        navigate(`/data/${customer.Users_ID}`); 
+                                    }}
+                                    >
+                                        Show
+                                        </button>
                                 </td>
                             </tr>
                         ))}

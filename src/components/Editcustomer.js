@@ -17,7 +17,7 @@ function EditCustomer() {
     const handleFileChange = (e) => {
         const file = e.target.files[0]; // ดึงไฟล์ที่เลือก
         if (file) {
-            setImageFile(file.name); // แสดงชื่อไฟล์ที่เลือก
+            setSelectedFile(file); // แสดงชื่อไฟล์ที่เลือก
         }
     };
     
@@ -41,9 +41,12 @@ function EditCustomer() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
+    const [selectedFile, setSelectedFile] = useState(null); // State สำหรับเก็บไฟล์ใหม่ที่ถูกเลือก
+
+
     const fetchCustomer = async () => {
         try {
-            const response = await axios.get(`http://10.13.1.95:3000/api/get-profile/${id}`);
+            const response = await axios.get(`http://10.13.3.78:3000/api/get-profile/${id}`);
             const data = response.data;
             setUserID(data.Users_ID);
             setUsername(data.Users_Username);
@@ -60,6 +63,7 @@ function EditCustomer() {
             setRegisType_Name(data.RegisType_Name);
             setUsersType_Name(data.UsersType_Name);
             setIsActive(data.Users_IsActive);
+
         } catch (error) {
             setError("Error fetching customer data.");
             console.error("Error fetching customer:", error);
@@ -94,46 +98,37 @@ function EditCustomer() {
 
         try {
             // 1. อัปเดตข้อมูลผู้ใช้
-            await axios.put(`http://10.13.1.95:3000/api/update-profile/${id}`, updatedCustomer);
+            await axios.put(`http://10.13.3.78:3000/api/update-profile/${id}`, updatedCustomer);
             
-            // 2. ตรวจสอบว่ามีไฟล์เก่าอยู่หรือไม่
-            if (Users_ImageFile) {
-                // หากมีการเลือกไฟล์ใหม่
-                const oldImageExists = !!Users_ImageFile; // เช็คว่าไฟล์เก่ามีอยู่หรือไม่
-        
-                if (oldImageExists) {
-                    // ลบภาพเก่าจาก API
-                    const deleteResponse = await axios.delete(`http://10.13.1.95:3000/api/delete-profile-image/${id}`);
-        
-                    // ตรวจสอบว่าการลบสำเร็จหรือไม่
-                    if (deleteResponse.data.status) {
-                        // 3. หลังจากลบภาพเก่าแล้ว อัปโหลดไฟล์รูปภาพใหม่
-                        const formData = new FormData();
-                        formData.append('Profile_Image', Users_ImageFile); // เพิ่มไฟล์รูปภาพ
-                        
-                        await axios.put(`http://10.13.1.95:3000/api/update-profile-image/${id}`, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            },
-                        });
-                    } else {
-                        // จัดการกรณีไม่สามารถลบภาพเก่าได้
-                        setError("ไม่สามารถลบภาพเก่าได้.");
-                        return;
-                    }
-                }
-            } else {
-                // หากไม่มีการเลือกไฟล์ใหม่ ให้ทำการอัปโหลดไฟล์รูปภาพเดิม (หรือจัดการตามความต้องการ)
+            // 2. ตรวจสอบว่ามีไฟล์ใหม่หรือไม่
+            if (selectedFile) {
                 const formData = new FormData();
-                formData.append('Profile_Image', Users_ImageFile); // เพิ่มไฟล์รูปภาพใหม่ (ที่เป็นไฟล์เดิม)
-                
-                await axios.put(`http://10.13.1.95:3000/api/update-profile-image/${id}`, formData, {
+                formData.append('Profile_Image', selectedFile); // เพิ่มไฟล์ใหม่ที่ถูกเลือก
+
+                const putImageResponse = await axios.put(`http://10.13.3.78:3000/api/update-profile-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+
+                // 3. ตรวจสอบว่าการอัปโหลดสำเร็จหรือไม่
+                if (putImageResponse.data.status === true) {
+                    // ส่งคำสั่งลบไฟล์เก่า
+                    const deleteData = { imagePath: Users_ImageFile }; // ส่งชื่อไฟล์ที่ต้องการลบ
+    
+                    try {
+                        await axios.delete(`http://10.13.3.78:3000/api/delete-profile-image/${id}`, { data: deleteData });
+                    } catch (deleteError) {
+                        console.error("Error deleting image:", deleteError.response?.data || deleteError.message);
+                        setError("ไม่สามารถลบภาพเก่าได้.");
+                        return;
+                    }
+                } else {
+                    setError("ไม่สามารถอัปโหลดภาพใหม่ได้.");
+                    return;
+                }
             }
-        
+    
             setSuccess(true);
             navigate('/'); // เปลี่ยนไปยังหน้าอื่นหลังจากบันทึกเสร็จ
         } catch (error) {

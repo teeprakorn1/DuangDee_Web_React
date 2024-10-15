@@ -1,10 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Nav from "./Nav";
 
-function Home({ Toggle }) {
+function Home({ Toggle }) { // รับ Toggle เป็น props
+    const [usersInSystem, setUsersInSystem] = useState(0);
+    const [usersOnline, setUsersOnline] = useState(0);
+    const [usersOffline, setUsersOffline] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const [systemResponse, onlineResponse, offlineResponse] = await Promise.all([
+                    axios.get("http://10.13.3.78:3000/api/get-count-users"),
+                    axios.get("http://10.13.3.78:3000/api/get-count-users-online"),
+                    axios.get("http://10.13.3.78:3000/api/get-count-users-offline")
+                ]);
+    
+                setUsersInSystem(systemResponse.data.Count);
+                setUsersOnline(onlineResponse.data.Count);
+                setUsersOffline(offlineResponse.data.Count);
+                setLoading(false);
+            } catch (err) {
+                setError("เกิดข้อผิดพลาดในการดึงข้อมูล");
+                setLoading(false);
+            }
+        };
+    
+        fetchUserData();
+    }, []);
+    
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
     return (
         <div className='px-3'>
-            <Nav Toggle={Toggle} />
+            <Nav onToggle={Toggle} /> {/* ส่ง Toggle ไปยัง Nav */}
             <div className='container-fluid'>
                 <div className='row g-3 my-2'>
                     {/* Users in System Card */}
@@ -12,10 +44,10 @@ function Home({ Toggle }) {
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
-                                    <h3 className='fs-2'>230</h3> {/* Update this value as needed */}
-                                    <p className='fs-5 text-muted'>Users in System</p> {/* Updated label */}
+                                    <h3 className='fs-2'>{usersInSystem}</h3>
+                                    <p className='fs-5 text-muted'>Users in System</p>
                                 </div>
-                                <i className='bi bi-person-circle p-3 fs-1 text-success'></i> {/* Changed icon */}
+                                <i className='bi bi-person-circle p-3 fs-1 text-success'></i>
                             </div>
                         </div>
                     </div>
@@ -24,8 +56,8 @@ function Home({ Toggle }) {
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
-                                    <h3 className='fs-2'>50</h3>
-                                    <p className='fs-5 text-muted'>Users Online</p>
+                                    <h3 className='fs-2'>{usersOnline}</h3>
+                                    <p className='fs-5 text-muted'>Users Active</p>
                                 </div>
                                 <i className='bi bi-person-check p-3 fs-1 text-info'></i>
                             </div>
@@ -36,8 +68,8 @@ function Home({ Toggle }) {
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
-                                    <h3 className='fs-2'>150</h3>
-                                    <p className='fs-5 text-muted'>Users Offline</p>
+                                    <h3 className='fs-2'>{usersOffline}</h3>
+                                    <p className='fs-5 text-muted'>Users Suspended</p>
                                 </div>
                                 <i className='bi bi-person-x p-3 fs-1 text-danger'></i>
                             </div>

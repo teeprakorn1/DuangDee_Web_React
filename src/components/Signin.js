@@ -35,7 +35,7 @@ export default function SignIn({ onSignin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://10.13.1.95:3000/api/login-admin`, {
+      const response = await axios.post(`http://10.13.3.78:3000/api/login-admin`, {
         Users_Username: username, // เปลี่ยน key เป็น Users_Username
         Users_Password: password, // เปลี่ยน key เป็น Users_Password
       });
@@ -113,13 +113,7 @@ export default function SignIn({ onSignin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
-              InputProps={{
-                endAdornment: (
-                  <Button onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? "Hide" : "Show"}
-                  </Button>
-                ),
-              }}
+             
             />
             <Button
               type="submit"
