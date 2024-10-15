@@ -68,18 +68,19 @@ function App() {
               )} />
 
               {/* Edit Customer Page */}
-              <Route path="/edit/:id" element={isSignedIn ? (
-                <div className='card'>
-                  <div className='card-header'>
-                    <h4>Edit Customer</h4>
+                <Route path="/edit/:id" element={isSignedIn ? (
+                  <div className='card'>
+                    <div className='card-header'>
+                      <h4>Edit Customer</h4>
+                    </div>
+                    <div className='card-body'>
+                      <EditCustomer /> {/* Render the EditCustomer component here */}
+                    </div>
                   </div>
-                  <div className='card-body'>
-                    <EditCustomer /> {/* Render the EditCustomer component here */}
-                  </div>
-                </div>
-              ) : (
-                <Navigate to="/" />
-              )} />
+                ) : (
+                  <Navigate to="/" />
+                )} />
+
 
               {/* Redirect any other path to home */}
               <Route path="*" element={<Navigate to="/" />} />

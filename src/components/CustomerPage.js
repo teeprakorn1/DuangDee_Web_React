@@ -11,13 +11,14 @@ function CustomerPage() {
     // ฟังก์ชันดึงข้อมูลลูกค้าจาก API
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('http://10.13.3.104:3000/api/get-profile');
+            const response = await axios.get('http://10.13.1.95:3000/api/get-profile');
+            console.log("Fetched customers:", response.data); // ตรวจสอบข้อมูลที่ดึงมา
             setCustomers(response.data);
         } catch (error) {
             console.error("Error fetching customers:", error);
         }
     };
-
+    
     useEffect(() => {
         fetchCustomers();
     }, []);
@@ -41,8 +42,8 @@ function CustomerPage() {
                     </thead>
                     <tbody>
                         {customers.map((customer, index) => (
-                            <tr key={customer.id}>
-                                <th scope="row">{index + 1}</th>
+                            <tr key={customer.Users_ID}>
+                                <td>{index + 1}</td> {/* แสดงลำดับที่ */}
                                 <td>{customer.Users_Username}</td>
                                 <td>{customer.Users_DisplayName}</td>
                                 <td>{customer.Users_FirstName}</td>
@@ -52,11 +53,15 @@ function CustomerPage() {
                                 <td>
                                     <button 
                                         className="btn btn-warning btn-sm me-2" 
-                                        onClick={() => navigate(`/edit/${customer.id}`)} // เปลี่ยนเส้นทางไปหน้า EditCustomer
+                                        onClick={() => {
+                                            console.log("Navigate to edit page:", `/edit/${customer.Users_ID}`);
+                                            navigate(`/edit/${customer.Users_ID}`); // ส่ง ID ไปที่เส้นทาง /edit/:id
+                                        }}
                                     >
                                         Edit
                                     </button>
-                                    <button className="btn btn-danger btn-sm">Delete</button>
+
+                                    <button className="btn btn-danger btn-sm">Show</button>
                                 </td>
                             </tr>
                         ))}
