@@ -142,7 +142,14 @@ function EditCustomer() {
 
     return (
         <div className="container mt-4">
-            <h1 className="text-center">แก้ไขข้อมูลผู้ใช้</h1>
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // ย้อนกลับไปหน้าก่อน
+                ></i>
+                <h1 className="text-center ms-5">แก้ไขข้อมูลผู้ใช้</h1>
+            </div>
             {loading ? (
                 <p>กำลังโหลดข้อมูล...</p>
             ) : (

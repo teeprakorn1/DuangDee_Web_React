@@ -117,6 +117,32 @@ h1 {
     font-size: 1rem; /* ขนาดฟอนต์ */
 }
 
+.card {
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    background-color: #f8f9fa; /* สีพื้นหลังนุ่มนวล */
+    padding: 20px;
+    border-radius: 10px;
+}
+.form-control-custom {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+
+
+
 
 
 

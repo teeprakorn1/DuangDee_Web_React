@@ -3,33 +3,33 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-function ZodiacPage() {
-    const [zodiacs, setZodiacs] = useState([]);
+function TarotPage() {
+    const [cards, setCards] = useState([]);
     const navigate = useNavigate(); 
 
-    const fetchZodiacs = async () => {
+    const fetchCards = async () => {
         try {
-            const response = await axios.get('http://10.13.3.78:3000/api/get-zodiac');
-            console.log("Fetched zodiacs:", response.data); 
-            setZodiacs(response.data);
+            const response = await axios.get('http://10.13.3.78:3000/api/get-card'); // ปรับเปลี่ยน API endpoint ที่นี่
+            console.log("Fetched tarot cards:", response.data); 
+            setCards(response.data);
         } catch (error) {
-            console.error("Error fetching zodiacs:", error);
+            console.error("Error fetching tarot cards:", error);
         }
     };
     
     useEffect(() => {
-        fetchZodiacs();
+        fetchCards();
     }, []);
 
     return (
         <div className="container mt-4">
             <div className="table-responsive" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
                 <table className="table table-hover caption-top bg-light rounded mt-4 shadow-sm" style={{ width: '100%' }}>
-                    <caption className="text-dark fs-4 mb-3">รายการราศี</caption>
+                    <caption className="text-dark fs-4 mb-3">รายการไพ่ Tarot</caption>
                     <thead className="table-light">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Card Name</th>
                             <th scope="col">Detail</th>
                             <th scope="col">Work</th>
                             <th scope="col">Finance</th>
@@ -40,19 +40,19 @@ function ZodiacPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {zodiacs.map((zodiac, index) => (
-                            <tr key={zodiac.Zodiac_ID}>
+                        {cards.map((card, index) => (
+                            <tr key={card.Card_ID}>
                                 <td>{index + 1}</td>
-                                <td>{zodiac.Zodiac_Name}</td>
-                                <td>{zodiac.Zodiac_Detail}</td>
-                                <td>{zodiac.Zodiac_WorkTopic}</td>
-                                <td>{zodiac.Zodiac_FinanceTopic}</td>
-                                <td>{zodiac.Zodiac_LoveTopic}</td>
-                                <td>{zodiac.Zodiac_Score}</td>
+                                <td>{card.Card_Name}</td>
+                                <td>{card.Card_Detail}</td> {/* เปลี่ยนชื่อฟิลด์ให้ตรงกับ API */}
+                                <td>{card.Card_WorkTopic}</td>
+                                <td>{card.Card_FinanceTopic}</td>
+                                <td>{card.Card_LoveTopic}</td>
+                                <td>{card.Card_Score}</td>
                                 <td>
                                     <img 
-                                        src={zodiac.Zodiac_ImageFile ? `http://10.13.3.78:3000${zodiac.Zodiac_ImageFile}` : 'URL รูปภาพ fallback'} 
-                                        alt={zodiac.Zodiac_Name} 
+                                        src={card.Card_ImageFile ? `http://10.13.3.78:3000${card.Card_ImageFile}` : 'URL รูปภาพ fallback'} 
+                                        alt={card.Card_Name} 
                                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
                                     />
                                 </td>
@@ -61,8 +61,8 @@ function ZodiacPage() {
                                         <button 
                                             className="btn btn-warning btn-sm me-2" 
                                             onClick={() => {
-                                                console.log("Navigate to edit page:", `/edit-zodiac/${zodiac.Zodiac_ID}`);
-                                                navigate(`/edit-zodiac/${zodiac.Zodiac_ID}`);
+                                                console.log("Navigate to edit page:", `/edit/${card.Card_ID}`);
+                                                navigate(`/edit/${card.Card_ID}`);
                                             }}
                                         >
                                             Edit
@@ -70,8 +70,8 @@ function ZodiacPage() {
                                         <button 
                                             className="btn btn-danger btn-sm"
                                             onClick={() => {
-                                                console.log("Navigate to detail page:", `/data-zodiac/${zodiac.Zodiac_ID}`);
-                                                navigate(`/data-zodiac/${zodiac.Zodiac_ID}`); 
+                                                console.log("Navigate to detail page:", `/data/${card.Card_ID}`);
+                                                navigate(`/data/${card.Card_ID}`); 
                                             }}
                                         >
                                             Show
@@ -87,4 +87,4 @@ function ZodiacPage() {
     );
 }
 
-export default ZodiacPage;
+export default TarotPage;

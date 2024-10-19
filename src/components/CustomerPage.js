@@ -1,18 +1,16 @@
-// src/CustomerPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function CustomerPage() {
     const [customers, setCustomers] = useState([]);
-    const navigate = useNavigate(); // สร้าง instance ของ useNavigate
+    const navigate = useNavigate(); 
 
-    // ฟังก์ชันดึงข้อมูลลูกค้าจาก API
     const fetchCustomers = async () => {
         try {
             const response = await axios.get('http://10.13.3.78:3000/api/get-profile');
-            console.log("Fetched customers:", response.data); // ตรวจสอบข้อมูลที่ดึงมา
+            console.log("Fetched customers:", response.data); 
             setCustomers(response.data);
         } catch (error) {
             console.error("Error fetching customers:", error);
@@ -37,13 +35,14 @@ function CustomerPage() {
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {customers.map((customer, index) => (
                             <tr key={customer.Users_ID}>
-                                <td>{index + 1}</td> {/* แสดงลำดับที่ */}
+                                <td>{index + 1}</td>
                                 <td>{customer.Users_Username}</td>
                                 <td>{customer.Users_DisplayName}</td>
                                 <td>{customer.Users_FirstName}</td>
@@ -51,11 +50,18 @@ function CustomerPage() {
                                 <td>{customer.Users_Email}</td>
                                 <td>{customer.Users_Phone}</td>
                                 <td>
+                                    <img 
+                                        src={customer.Users_ImageUrl ? `http://10.13.3.78:3000${customer.Users_ImageUrl}` : 'URL รูปภาพ fallback'} 
+                                        alt={customer.Users_Username} 
+                                        style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
+                                    />
+                                </td>
+                                <td>
                                     <button 
                                         className="btn btn-warning btn-sm me-2" 
                                         onClick={() => {
                                             console.log("Navigate to edit page:", `/edit/${customer.Users_ID}`);
-                                            navigate(`/edit/${customer.Users_ID}`); // ส่ง ID ไปที่เส้นทาง /edit/:id
+                                            navigate(`/edit/${customer.Users_ID}`);
                                         }}
                                     >
                                         Edit
@@ -68,7 +74,7 @@ function CustomerPage() {
                                     }}
                                     >
                                         Show
-                                        </button>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

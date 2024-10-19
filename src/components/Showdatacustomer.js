@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 import './style.css';
 
 function Showdatacustomer() {
@@ -23,6 +24,8 @@ function Showdatacustomer() {
     const [Users_IsActive, setIsActive] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate(); // ใช้เพื่อไปยังหน้า ZodiacPage
+
 
     const fetchCustomer = async () => {
         try {
@@ -57,7 +60,14 @@ function Showdatacustomer() {
 
     return (
         <div className="container mt-4">
-            <h1 className="text-center">ข้อมูลผู้ใช้</h1>
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // ย้อนกลับไปหน้าก่อน
+                ></i>
+                <h1 className="text-center ms-5">ข้อมูลผู้ใช้</h1>
+            </div>
             {loading ? (
                 <p>กำลังโหลดข้อมูล...</p>
             ) : error ? (
