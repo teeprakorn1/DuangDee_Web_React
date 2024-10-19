@@ -14,13 +14,13 @@ function EditCustomer() {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0]; // ดึงไฟล์ที่เลือก
         if (file) {
             setSelectedFile(file); // แสดงชื่อไฟล์ที่เลือก
         }
     };
-    
 
     const [Users_ID, setUserID] = useState('');
     const [Users_Username, setUsername] = useState('');
@@ -40,9 +40,8 @@ function EditCustomer() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-
     const [selectedFile, setSelectedFile] = useState(null); // State สำหรับเก็บไฟล์ใหม่ที่ถูกเลือก
-
+    const [phoneError, setPhoneError] = useState(''); // State สำหรับข้อความแสดงข้อผิดพลาดหมายเลขโทรศัพท์
 
     const fetchCustomer = async () => {
         try {
@@ -63,7 +62,6 @@ function EditCustomer() {
             setRegisType_Name(data.RegisType_Name);
             setUsersType_Name(data.UsersType_Name);
             setIsActive(data.Users_IsActive);
-
         } catch (error) {
             setError("Error fetching customer data.");
             console.error("Error fetching customer:", error);
@@ -76,8 +74,25 @@ function EditCustomer() {
         fetchCustomer();
     }, [id]);
 
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        // ตรวจสอบว่าเป็นตัวเลขและมีความยาว 10 ตัว
+        if (/^\d*$/.test(value) && value.length <= 10) {
+            setPhone(value);
+            setPhoneError(''); // เคลียร์ข้อความแสดงข้อผิดพลาดเมื่อกรอกข้อมูลถูกต้อง
+        } else {
+            setPhoneError('หมายเลขโทรศัพท์ต้องเป็นตัวเลข 10 หลัก');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // ตรวจสอบหมายเลขโทรศัพท์อีกครั้งก่อนส่งข้อมูล
+        if (Users_Phone.length !== 10) {
+            setPhoneError('หมายเลขโทรศัพท์ต้องเป็น 10 หลัก');
+            return; // ไม่ส่งข้อมูลหากหมายเลขโทรศัพท์ไม่ถูกต้อง
+        }
+
         const updatedCustomer = {
             Users_ID,
             Users_Username,
@@ -135,9 +150,6 @@ function EditCustomer() {
             setError("Error updating customer data.");
             console.error("Error updating customer:", error);
         }
-        
-        
-        
     };
 
     return (
@@ -223,8 +235,6 @@ function EditCustomer() {
                                 value={Users_Email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                readOnly
-                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
                             />
                         </div>
                         <div className="mb-3">
@@ -234,9 +244,10 @@ function EditCustomer() {
                                 className="form-control"
                                 name="Users_Phone"
                                 value={Users_Phone}
-                                onChange={(e) => setPhone(e.target.value)}
+                                onChange={handlePhoneChange}
                                 required
                             />
+                            {phoneError && <small className="text-danger">{phoneError}</small>} {/* แสดงข้อความแสดงข้อผิดพลาด */}
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Birth Date</label>
@@ -244,117 +255,28 @@ function EditCustomer() {
                                 type="date"
                                 className="form-control"
                                 name="Users_BirthDate"
-                                value={Users_BirthDate ? Users_BirthDate.split('T')[0] : ''}
+                                value={Users_BirthDate}
                                 onChange={(e) => setBirthDate(e.target.value)}
-                            />
-                            <p className="mt-2">Formatted Date: {Users_BirthDate ? formatDate(Users_BirthDate) : ''}</p>
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Registration Date</label>
-                            <input
-                                type="date"
-                                className="form-control"
-                                name="Users_RegisDate"
-                                value={Users_RegisDate ? Users_RegisDate.split('T')[0] : ''}
-                                readOnly
-                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+                                required
                             />
                         </div>
-
                         <div className="mb-3">
                             <label className="form-label">Image File</label>
-                            <div className="d-flex">
-                                <input
-                                    type="text"
-                                    className="form-control me-2"
-                                    name="Users_ImageFile"
-                                    value={Users_ImageFile}
-                                    readOnly
-                                    placeholder="เลือกรูปภาพ..."
-                                />
-                                <input
-                                    type="file"
-                                    className="form-control"
-                                    accept="image/*" // จำกัดประเภทไฟล์ให้เลือกเฉพาะภาพ
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Google UID</label>
                             <input
-                                type="text"
+                                type="file"
                                 className="form-control"
-                                name="Users_Google_Uid"
-                                value={Users_Google_Uid}
-                                onChange={(e) => setGoogle_Uid(e.target.value)}
-                                readOnly
-                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+                                onChange={handleFileChange}
                             />
+                            {Users_ImageFile && (
+                                <div className="mt-2">
+                                    <img src={Users_ImageFile} alt="Profile" style={{ width: '100px' }} />
+                                </div>
+                            )}
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label">Gender</label>
-                            <select
-                                className="form-select"
-                                name="UsersGender_ID"
-                                value={UsersGender_ID} // ใช้ค่า UsersGender_ID เพื่อให้ dropdown แสดงค่าที่ถูกเลือก
-                                onChange={(e) => setGender_ID(e.target.value)} // อัปเดต state เมื่อมีการเลือกใหม่
-                                required
-                            >
-                                <option value=''>เลือกเพศ</option> {/* ตัวเลือกว่าง */}
-                                <option value="1">MALE</option>
-                                <option value="2">FEMALE</option>
-                                <option value="3">OTHER</option>
-                            </select>
-                        </div>
-
-
-
-                        <div className="mb-3">
-                            <label className="form-label">Registration Type ID</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="RegisType_Name"
-                                value={RegisType_Name}
-                                onChange={(e) => setRegisType_Name(e.target.value)}
-                                readOnly
-                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
-
-
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">User Type ID</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="UsersType_Name"
-                                value={UsersType_Name}
-                                onChange={(e) => setUsersType_Name(e.target.value)}
-                                readOnly
-                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
-
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Is Active</label>
-                            <select
-                                className="form-select"
-                                name="Users_IsActive"
-                                value={Users_IsActive}
-                                onChange={(e) => setIsActive(e.target.value)}
-                                required
-                            >
-                                <option value="1">Active</option>
-                                <option value="0">Suspended</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                        <button type="submit" className="btn btn-primary">บันทึก</button>
                     </form>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
-                    {success && <div className="alert alert-success mt-3">บันทึกข้อมูลเรียบร้อยแล้ว</div>}
+                    {success && <div className="alert alert-success mt-3">บันทึกข้อมูลสำเร็จ!</div>}
                 </div>
             )}
         </div>
