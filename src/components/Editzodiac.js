@@ -22,7 +22,7 @@ function Editzodiac() {
 
     const fetchzodiac = async () => {
         try {
-            const response = await axios.get(`http://10.13.3.78:3000/api/get-zodiac/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-zodiac/${id}`);
             const data = response.data;
             setZodiacID(data.Zodiac_ID); // ตั้งค่า Zodiac ID
             setZodiacName(data.Zodiac_Name);
@@ -64,14 +64,14 @@ function Editzodiac() {
 
         try {
             // 1. อัปเดตข้อมูล Zodiac
-            await axios.put(`http://10.13.3.78:3000/api/update-zodiac/${id}`, updatedZodiac);
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-zodiac/${id}`, updatedZodiac);
             
             // 2. ตรวจสอบว่ามีไฟล์ใหม่หรือไม่
             if (selectedFile) {
                 const formData = new FormData();
                 formData.append('Zodiac_Image', selectedFile); // เพิ่มไฟล์ใหม่ที่ถูกเลือก
 
-                const putImageResponse = await axios.put(`http://10.13.3.78:3000/api/update-Zodiac-image/${id}`, formData, {
+                const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-Zodiac-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -83,7 +83,7 @@ function Editzodiac() {
                     const deleteData = { imagePath: Zodiac_ImageFile }; // ส่งชื่อไฟล์ที่ต้องการลบ
     
                     try {
-                        await axios.delete(`http://10.13.3.78:3000/api/delete-zodiac-image/${id}`, { data: deleteData });
+                        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-zodiac-image/${id}`, { data: deleteData });
                     } catch (deleteError) {
                         console.error("Error deleting image:", deleteError.response?.data || deleteError.message);
                         setError("ไม่สามารถลบภาพเก่าได้.");

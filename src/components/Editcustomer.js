@@ -46,7 +46,7 @@ function EditCustomer() {
 
     const fetchCustomer = async () => {
         try {
-            const response = await axios.get(`http://10.13.3.78:3000/api/get-profile/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
             const data = response.data;
             setUserID(data.Users_ID);
             setUsername(data.Users_Username);
@@ -98,14 +98,14 @@ function EditCustomer() {
 
         try {
             // 1. อัปเดตข้อมูลผู้ใช้
-            await axios.put(`http://10.13.3.78:3000/api/update-profile/${id}`, updatedCustomer);
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile/${id}`, updatedCustomer);
             
             // 2. ตรวจสอบว่ามีไฟล์ใหม่หรือไม่
             if (selectedFile) {
                 const formData = new FormData();
                 formData.append('Profile_Image', selectedFile); // เพิ่มไฟล์ใหม่ที่ถูกเลือก
 
-                const putImageResponse = await axios.put(`http://10.13.3.78:3000/api/update-profile-image/${id}`, formData, {
+                const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -117,7 +117,7 @@ function EditCustomer() {
                     const deleteData = { imagePath: Users_ImageFile }; // ส่งชื่อไฟล์ที่ต้องการลบ
     
                     try {
-                        await axios.delete(`http://10.13.3.78:3000/api/delete-profile-image/${id}`, { data: deleteData });
+                        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-profile-image/${id}`, { data: deleteData });
                     } catch (deleteError) {
                         console.error("Error deleting image:", deleteError.response?.data || deleteError.message);
                         setError("ไม่สามารถลบภาพเก่าได้.");

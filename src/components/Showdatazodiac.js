@@ -12,7 +12,7 @@ function ShowDataZodiac() {
 
     const fetchZodiac = async () => {
         try {
-            const response = await axios.get(`http://10.13.3.78:3000/api/get-zodiac/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-zodiac/${id}`);
             setZodiac(response.data);
         } catch (error) {
             setError("Error fetching zodiac data.");
@@ -51,7 +51,7 @@ function ShowDataZodiac() {
                             <h5 className="card-title text-center">{zodiac.Zodiac_Name}</h5>
                             <div className="text-center mb-3">
                                 <img 
-                                    src={zodiac.Zodiac_ImageFile ? `http://10.13.3.78:3000${zodiac.Zodiac_ImageFile}` : 'URL รูปภาพ fallback'} 
+                                    src={zodiac.Zodiac_ImageFile ? `${process.env.REACT_APP_BASE_URL}${zodiac.Zodiac_ImageFile}` : 'URL รูปภาพ fallback'} 
                                     alt={zodiac.Zodiac_Name} 
                                     className="img-fluid rounded-circle" 
                                     style={{ width: '150px', height: '150px', objectFit: 'cover' }} 

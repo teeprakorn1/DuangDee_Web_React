@@ -13,9 +13,9 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
         const fetchUserData = async () => {
             try {
                 const [systemResponse, onlineResponse, offlineResponse] = await Promise.all([
-                    axios.get("http://10.13.3.78:3000/api/get-count-users"),
-                    axios.get("http://10.13.3.78:3000/api/get-count-users-online"),
-                    axios.get("http://10.13.3.78:3000/api/get-count-users-offline")
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-count-users`),
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-count-users-online`),
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-count-users-offline`)
                 ]);
     
                 setUsersInSystem(systemResponse.data.Count);

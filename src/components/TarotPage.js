@@ -9,7 +9,7 @@ function TarotPage() {
 
     const fetchCards = async () => {
         try {
-            const response = await axios.get('http://10.13.3.78:3000/api/get-card'); // ปรับเปลี่ยน API endpoint ที่นี่
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card`); // ปรับเปลี่ยน API endpoint ที่นี่
             console.log("Fetched tarot cards:", response.data); 
             setCards(response.data);
         } catch (error) {
@@ -51,7 +51,7 @@ function TarotPage() {
                                 <td>{card.Card_Score}</td>
                                 <td>
                                     <img 
-                                        src={card.Card_ImageFile ? `http://10.13.3.78:3000${card.Card_ImageFile}` : 'URL รูปภาพ fallback'} 
+                                        src={card.Card_ImageFile ? `${process.env.REACT_APP_BASE_URL}${card.Card_ImageFile}` : 'URL รูปภาพ fallback'} 
                                         alt={card.Card_Name} 
                                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
                                     />

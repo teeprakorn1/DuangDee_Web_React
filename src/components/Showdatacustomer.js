@@ -29,7 +29,7 @@ function Showdatacustomer() {
 
     const fetchCustomer = async () => {
         try {
-            const response = await axios.get(`http://10.13.3.78:3000/api/get-profile/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
             const data = response.data;
             setUserID(data.Users_ID);
             setUsername(data.Users_Username);

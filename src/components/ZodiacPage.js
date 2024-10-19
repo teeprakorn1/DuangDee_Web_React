@@ -9,7 +9,7 @@ function ZodiacPage() {
 
     const fetchZodiacs = async () => {
         try {
-            const response = await axios.get('http://10.13.3.78:3000/api/get-zodiac');
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-zodiac`);
             console.log("Fetched zodiacs:", response.data); 
             setZodiacs(response.data);
         } catch (error) {
@@ -51,7 +51,7 @@ function ZodiacPage() {
                                 <td>{zodiac.Zodiac_Score}</td>
                                 <td>
                                     <img 
-                                        src={zodiac.Zodiac_ImageFile ? `http://10.13.3.78:3000${zodiac.Zodiac_ImageFile}` : 'URL รูปภาพ fallback'} 
+                                        src={zodiac.Zodiac_ImageFile ? `${process.env.REACT_APP_BASE_URL}${zodiac.Zodiac_ImageFile}` : 'URL รูปภาพ fallback'} 
                                         alt={zodiac.Zodiac_Name} 
                                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
                                     />

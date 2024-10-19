@@ -9,7 +9,7 @@ function CustomerPage() {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('http://10.13.3.78:3000/api/get-profile');
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile`);
             console.log("Fetched customers:", response.data); 
             setCustomers(response.data);
         } catch (error) {
@@ -51,7 +51,7 @@ function CustomerPage() {
                                 <td>{customer.Users_Phone}</td>
                                 <td>
                                     <img 
-                                        src={customer.Users_ImageUrl ? `http://10.13.3.78:3000${customer.Users_ImageUrl}` : 'URL รูปภาพ fallback'} 
+                                        src={customer.Users_ImageUrl ? `${process.env.REACT_APP_BASE_URL}${customer.Users_ImageUrl}` : 'URL รูปภาพ fallback'} 
                                         alt={customer.Users_Username} 
                                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
                                     />
