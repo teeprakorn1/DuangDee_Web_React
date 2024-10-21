@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function CustomerPage() {
     const [customers, setCustomers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(''); // สเตตัสสำหรับการค้นหา
     const navigate = useNavigate(); 
 
     const fetchCustomers = async () => {
@@ -21,11 +22,33 @@ function CustomerPage() {
         fetchCustomers();
     }, []);
 
+    // ฟังก์ชันสำหรับการกรองลูกค้า
+    const filteredCustomers = customers.filter(customer => {
+        const username = customer.Users_Username || ''; // ใช้ค่าเริ่มต้นเป็น ''
+        const displayName = customer.Users_DisplayName || ''; // ใช้ค่าเริ่มต้นเป็น ''
+        
+        return (
+            username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            displayName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
+
     return (
         <div className="container mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h2 className="text-dark">รายการผู้ใช้</h2>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="ค้นหาผู้ใช้..." 
+                    value={searchTerm} 
+                    onChange={(e) => setSearchTerm(e.target.value)} // อัพเดตค่า searchTerm ตามที่ผู้ใช้พิมพ์
+                    style={{ width: '300px' }} // ปรับขนาดช่องค้นหา
+                />
+            </div>
+
             <div className="table-responsive">
                 <table className="table table-hover caption-top bg-light rounded mt-4 shadow-sm">
-                    <caption className="text-dark fs-4 mb-3">รายการผู้ใช้</caption>
                     <thead className="table-light">
                         <tr>
                             <th scope="col">#</th>
@@ -40,7 +63,7 @@ function CustomerPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {customers.map((customer, index) => (
+                        {filteredCustomers.map((customer, index) => (
                             <tr key={customer.Users_ID}>
                                 <td>{index + 1}</td>
                                 <td>{customer.Users_Username}</td>

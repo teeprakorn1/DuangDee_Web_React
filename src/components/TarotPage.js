@@ -34,7 +34,9 @@ function TarotPage() {
                             <th scope="col">Work</th>
                             <th scope="col">Finance</th>
                             <th scope="col">Love</th>
-                            <th scope="col">Score</th>
+                            <th scope="col">WorkScore</th>
+                            <th scope="col">FinanceScore</th>
+                            <th scope="col">LoveScore</th>
                             <th scope="col">Image</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -48,7 +50,9 @@ function TarotPage() {
                                 <td>{card.Card_WorkTopic}</td>
                                 <td>{card.Card_FinanceTopic}</td>
                                 <td>{card.Card_LoveTopic}</td>
-                                <td>{card.Card_Score}</td>
+                                <td>{card.Card_WorkScore}</td>
+                                <td>{card.Card_FinanceScore}</td>
+                                <td>{card.Card_LoveScore}</td>
                                 <td>
                                     <img 
                                         src={card.Card_ImageFile ? `${process.env.REACT_APP_BASE_URL}${card.Card_ImageFile}` : 'URL รูปภาพ fallback'} 
@@ -61,8 +65,8 @@ function TarotPage() {
                                         <button 
                                             className="btn btn-warning btn-sm me-2" 
                                             onClick={() => {
-                                                console.log("Navigate to edit page:", `/edit/${card.Card_ID}`);
-                                                navigate(`/edit/${card.Card_ID}`);
+                                                console.log("Navigate to edit page:", `/edit-tarot-card/${card.Card_ID}`);
+                                                navigate(`/edit-tarot-card/${card.Card_ID}`);
                                             }}
                                         >
                                             Edit
@@ -70,8 +74,8 @@ function TarotPage() {
                                         <button 
                                             className="btn btn-danger btn-sm"
                                             onClick={() => {
-                                                console.log("Navigate to detail page:", `/data/${card.Card_ID}`);
-                                                navigate(`/data/${card.Card_ID}`); 
+                                                console.log("Navigate to detail page:", `/data-tarot-card/${card.Card_ID}`);
+                                                navigate(`/data-tarot-card/${card.Card_ID}`); 
                                             }}
                                         >
                                             Show

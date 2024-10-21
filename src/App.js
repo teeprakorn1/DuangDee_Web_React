@@ -12,6 +12,11 @@ import ZodiacPage from './components/ZodiacPage';
 import TarotPage from './components/TarotPage'; 
 import Editzodiac from './components/Editzodiac';
 import Showdatazodiac from './components/Showdatazodiac';
+import EditTarotCard from './components/EditTarotCard';
+import ShowdataTarot from './components/ShowdataTarot.js';
+import AddAdmin from './components/AddAdmin';
+
+
 
 function App() {
   const [toggle, setToggle] = useState(true);
@@ -90,6 +95,17 @@ function App() {
                 element={isSignedIn ? renderCard("Tarot Page", <TarotPage />) : <Navigate to="/" />} 
               />
 
+              <Route 
+                path="/edit-tarot-card/:id" 
+                element={isSignedIn ? renderCard("Edit Tarot Card", <EditTarotCard/>) : <Navigate to="/" />} 
+              />
+
+              <Route 
+                path="/data-tarot-card/:id" 
+                element={isSignedIn ? renderCard("Data Tarot Card", <ShowdataTarot />) : <Navigate to="/" />} 
+              />
+             
+
               {/* หน้า Zodiac */}
               <Route 
                 path="/zodiac" 
@@ -102,6 +118,11 @@ function App() {
               <Route 
                 path="/data-zodiac/:id" 
                 element={isSignedIn ? renderCard("Data Zodiac", <Showdatazodiac  />) : <Navigate to="/" />} 
+              />
+
+              <Route 
+                path="/add-admin/" 
+                element={isSignedIn ? renderCard("Add Admin", <AddAdmin  />) : <Navigate to="/" />} 
               />
 
               {/* เส้นทางใด ๆ ที่ไม่ตรง จะถูกนำกลับไปหน้าแรก */}

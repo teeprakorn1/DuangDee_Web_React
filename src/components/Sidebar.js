@@ -27,6 +27,10 @@ function Sidebar({ onLogout }) { // รับ prop onLogout
                     <i className='bi bi-star-fill fs-5 me-3'></i>
                     <span>Zodiac</span>
                 </Link>
+                <Link className='list-group-item py-2' to='/add-admin'>
+                    <i className='bi bi-person-fill-add fs-5 me-3'></i>
+                    <span>Add Admin</span>
+                </Link>
             </div>
             {/* Center Logout link */}
             <div className="d-flex justify-content-center mt-auto mb-2">
