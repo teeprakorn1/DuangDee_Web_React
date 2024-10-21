@@ -40,16 +40,23 @@ function EditTarotCard() {
         } finally {
             setLoading(false);
         }
-    }, [id]); // Memoizing on the id to prevent unnecessary re-creation
+    }, [id]);
 
     useEffect(() => {
         fetchCardDetails();
-    }, [fetchCardDetails]); // Now fetchCardDetails is included in the dependency array
+    }, [fetchCardDetails]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
+        }
+    };
+
+    const handleScoreChange = (setter) => (e) => {
+        const value = e.target.value;
+        if (value === '' || (value >= 0 && value <= 100)) {
+            setter(value); // Set value if it's empty or between 0 and 100
         }
     };
 
@@ -87,7 +94,7 @@ function EditTarotCard() {
 
             setSuccess(true);
             alert('Tarot card updated successfully');
-            navigate(`/edit-tarot-card/${id}`); // Navigate to Tarot card list after saving
+            navigate(`/edit-tarot-card/${id}`);
 
         } catch (error) {
             setError("Error updating tarot card.");
@@ -155,7 +162,8 @@ function EditTarotCard() {
                             type="number"
                             className="form-control"
                             value={Card_WorkScore}
-                            onChange={(e) => setCardWorkScore(e.target.value)}
+                            onChange={handleScoreChange(setCardWorkScore)}
+                            max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">
@@ -164,7 +172,8 @@ function EditTarotCard() {
                             type="number"
                             className="form-control"
                             value={Card_FinanceScore}
-                            onChange={(e) => setCardFinanceScore(e.target.value)}
+                            onChange={handleScoreChange(setCardFinanceScore)}
+                            max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">
@@ -173,7 +182,8 @@ function EditTarotCard() {
                             type="number"
                             className="form-control"
                             value={Card_LoveScore}
-                            onChange={(e) => setCardLoveScore(e.target.value)}
+                            onChange={handleScoreChange(setCardLoveScore)}
+                            max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">

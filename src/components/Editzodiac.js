@@ -51,6 +51,14 @@ function Editzodiac() {
         }
     };
 
+    const handleScoreChange = (e) => {
+        const value = e.target.value;
+        // ตรวจสอบว่าเป็นค่าตัวเลขและไม่เกิน 100
+        if (value >= 0 && value <= 100) {
+            setZodiacScore(value);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const updatedZodiac = {
@@ -190,8 +198,9 @@ function Editzodiac() {
                                 type="number"
                                 className="form-control"
                                 value={Zodiac_Score}
-                                onChange={(e) => setZodiacScore(e.target.value)}
+                                onChange={handleScoreChange} // ใช้ handleScoreChange แทน
                                 required
+                                max="101" // จำกัดค่าไม่เกิน 100
                             />
                         </div>
                         <div className="mb-3">
