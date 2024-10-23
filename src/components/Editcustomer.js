@@ -188,7 +188,6 @@ function EditCustomer() {
                                 name="Users_Username"
                                 value={Users_Username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                required
                                 readOnly
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
                             />

@@ -31,10 +31,18 @@ function Sidebar({ onLogout }) { // รับ prop onLogout
                     <i className='bi bi-person-fill-add fs-5 me-3'></i>
                     <span>Add Admin</span>
                 </Link>
+                <Link className='list-group-item py-2' to='/hand-detail'> {/* Updated the route for Hand Detail */}
+                    <i className='bi bi-hand-index fs-5 me-3'></i> {/* Changed to a hand icon */}
+                    <span>Hand Detail</span>
+                </Link>
+                <Link className='list-group-item py-2' to='/summary-detail'> {/* Updated the route for Hand Detail */}
+                    <i className='bi bi-file-earmark-person-fill fs-5 me-3'></i> {/* Changed to a hand icon */}
+                    <span>Summary Detail</span>
+                </Link>
             </div>
             {/* Center Logout link */}
             <div className="d-flex justify-content-center mt-auto mb-2">
-                <button className='list-group-item logout-link rounded' onClick={onLogout}> {/* เปลี่ยนเป็นปุ่มเพื่อเรียกฟังก์ชัน logout */}
+                <button className='list-group-item logout-link rounded' onClick={onLogout}>
                     <i className='bi bi-power fs-5 me-2'></i>
                     <span>Log out</span>
                 </button>

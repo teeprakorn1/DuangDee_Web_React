@@ -89,6 +89,15 @@ function Showdatatarot() {
                             <label className="form-label"><strong>คะแนนความรัก:</strong></label>
                             <div className="form-control-custom">{cardDetails.Card_LoveScore}</div>
                         </div>
+                        {/* Edit Button */}
+                        <div className="mt-4">
+                            <button 
+                                className="btn btn-secondary" // You can change this class to match your desired button style
+                                onClick={() => navigate(`/edit-tarot/${id}`)} // นำทางไปยังหน้า EditTarot
+                            >
+                                Edit Tarot Card
+                            </button>
+                        </div>
                     </div>
                 </div>
             ) : (

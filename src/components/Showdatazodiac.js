@@ -77,6 +77,15 @@ function ShowDataZodiac() {
                                 <label className="form-label"><strong>คะแนน:</strong></label>
                                 <div className="form-control-custom">{zodiac.Zodiac_Score}</div>
                             </div>
+                            {/* Edit Button */}
+                            <div className="mt-4 d-flex justify-content-start">
+                                <button 
+                                    className="btn btn-secondary" // Button style
+                                    onClick={() => navigate(`/edit-zodiac/${id}`)} // นำทางไปยังหน้า Editzodiac
+                                >
+                                    Edit Zodiac
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )

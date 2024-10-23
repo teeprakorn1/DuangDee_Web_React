@@ -26,7 +26,6 @@ function Showdatacustomer() {
     const [error, setError] = useState(null);
     const navigate = useNavigate(); // ใช้เพื่อไปยังหน้า ZodiacPage
 
-
     const fetchCustomer = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
@@ -163,6 +162,15 @@ function Showdatacustomer() {
                         <div className="form-control-custom">
                             {Users_IsActive === "1" ? "Active" : "Suspended"}
                         </div>
+                    </div>
+                    {/* Edit Button */}
+                    <div className="mt-4">
+                        <button 
+                            className="btn btn-secondary" 
+                            onClick={() => navigate(`/edit-customer/${id}`)} // เปลี่ยนเส้นทางไปยังหน้า edit
+                        >
+                            Edit Customer
+                        </button>
                     </div>
                 </div>
             )}

@@ -15,33 +15,36 @@ import Showdatazodiac from './components/Showdatazodiac';
 import EditTarotCard from './components/EditTarotCard';
 import ShowdataTarot from './components/ShowdataTarot';
 import AddAdmin from './components/AddAdmin';
+import HandDetail from './components/HandDetail';
+import EditHandDetail from './components/EditHandDetail';
+import ShowdataHandDetail from './components/ShowdataHandDetail';
+import SummaryDetail from './components/SummaryDetail';
+import EditDataSummaryDetail from './components/EditDataSummaryDetail';
+import ShowDataSummaryDetail from './components/ShowDataSummaryDetail';
 
 function App() {
   const [toggle, setToggle] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [showPinPage, setShowPinPage] = useState(false); // สถานะเพื่อแสดงหน้า Pin
+  const [showPinPage, setShowPinPage] = useState(false);
 
-  // ตรวจสอบ Local Storage เมื่อโหลดหน้าเว็บใหม่
+  // Check local storage for saved sign-in status
   useEffect(() => {
     const savedSigninStatus = localStorage.getItem('isSignedIn');
-    if (savedSigninStatus === 'true') {
-      setIsSignedIn(true);  // ตั้งค่าสถานะเป็น true ถ้าเคยลงชื่อเข้าใช้แล้ว
-    }
-  }, []);  // [] ทำให้ useEffect ทำงานครั้งเดียวเมื่อ component ถูกโหลด
+    setIsSignedIn(savedSigninStatus === 'true');
+  }, []);
 
-  const handleToggle = () => setToggle((prev) => !prev); 
+  const handleToggle = () => setToggle((prev) => !prev);
 
   const handleSignin = () => {
     setIsSignedIn(true);
-    localStorage.setItem('isSignedIn', 'true');  // เก็บสถานะลงใน Local Storage
+    localStorage.setItem('isSignedIn', 'true');
   };
 
   const handleLogout = () => {
     setIsSignedIn(false);
-    localStorage.removeItem('isSignedIn');  // ลบสถานะการเข้าสู่ระบบเมื่อออกจากระบบ
+    localStorage.removeItem('isSignedIn');
   };
 
-  // ฟังก์ชันสำหรับแสดงการ์ด
   const renderCard = (header, body) => (
     <div className='card'>
       <div className='card-header'>
@@ -51,17 +54,14 @@ function App() {
     </div>
   );
 
-  // ฟังก์ชันเพื่อเปิดหน้า Pin
-  const handleAddAdminClick = () => {
-    setShowPinPage(true);
-  };
+  const handleAddAdminClick = () => setShowPinPage(true);
 
   return (
     <Router>
       <div className='d-flex min-vh-100 bg-light'>
         {isSignedIn && toggle && (
           <div className='col-3 col-md-2 bg-white shadow vh-100'>
-            <Sidebar onLogout={handleLogout} onAddAdminClick={handleAddAdminClick} /> {/* ส่งฟังก์ชันไปยัง Sidebar */}
+            <Sidebar onLogout={handleLogout} onAddAdminClick={handleAddAdminClick} />
           </div>
         )}
         <div className={`flex-grow-1 ${toggle ? 'col-md-9' : 'col-12'}`}>
@@ -115,12 +115,36 @@ function App() {
                 path="/add-admin" 
                 element={isSignedIn ? renderCard("Add Admin", <AddAdmin />) : <Navigate to="/" />} 
               />
+              <Route 
+                path="/hand-detail" 
+                element={isSignedIn ? renderCard("Hand Detail", <HandDetail />) : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/edit-hand-detail/:id" 
+                element={isSignedIn ? renderCard("Edit Hand Detail", <EditHandDetail />) : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/data-hand-detail/:id" 
+                element={isSignedIn ? renderCard("Show Hand Detail", <ShowdataHandDetail />) : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/summary-detail" 
+                element={isSignedIn ? renderCard("Summary Detail", <SummaryDetail />) : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/edit-summary-detail/:id" 
+                element={isSignedIn ? renderCard("Edit Summary Detail", <EditDataSummaryDetail />) : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/data-summary-detail/:id" 
+                element={isSignedIn ? renderCard("Show Summary Detail", <ShowDataSummaryDetail />) : <Navigate to="/" />} 
+              />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
         </div>
       </div>
-      {showPinPage && <Navigate to="/pin" />} {/* นำทางไปยังหน้า Pin หากสถานะ showPinPage เป็น true */}
+      {showPinPage && <Navigate to="/pin" />}
     </Router>
   );
 }
