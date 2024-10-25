@@ -1,26 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function EditCustomer() {
-    const { id } = useParams(); // รับ ID จาก URL
+    const { id } = useParams(); 
     const navigate = useNavigate();
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0]; // ดึงไฟล์ที่เลือก
-        if (file) {
-            setSelectedFile(file); // แสดงชื่อไฟล์ที่เลือก
-        }
-    };
 
     const [Users_ID, setUserID] = useState('');
     const [Users_Username, setUsername] = useState('');
@@ -40,58 +25,64 @@ function EditCustomer() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null); // State สำหรับเก็บไฟล์ใหม่ที่ถูกเลือก
-    const [phoneError, setPhoneError] = useState(''); // State สำหรับข้อความแสดงข้อผิดพลาดหมายเลขโทรศัพท์
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [phoneError, setPhoneError] = useState('');
 
-    const fetchCustomer = async () => {
+    const fetchCustomer = useCallback(async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
             const data = response.data;
-            setUserID(data.Users_ID);
-            setUsername(data.Users_Username);
-            setDisplayName(data.Users_DisplayName);
-            setFirstName(data.Users_FirstName);
-            setLastName(data.Users_LastName);
-            setEmail(data.Users_Email);
-            setPhone(data.Users_Phone);
-            setBirthDate(data.Users_BirthDate.split('T')[0]); // แปลงให้เป็นวันที่
-            setRegisDate(data.Users_RegisDate);
-            setImageFile(data.Users_ImageFile);
-            setGoogle_Uid(data.Users_Google_Uid);
-            setGender_ID(data.UsersGender_ID);
-            setRegisType_Name(data.RegisType_Name);
-            setUsersType_Name(data.UsersType_Name);
-            setIsActive(data.Users_IsActive);
+            setUserID(data.Users_ID || '');
+            setUsername(data.Users_Username || '');
+            setDisplayName(data.Users_DisplayName || '');
+            setFirstName(data.Users_FirstName || '');
+            setLastName(data.Users_LastName || '');
+            setEmail(data.Users_Email || '');
+            setPhone(data.Users_Phone || '');
+            setBirthDate(data.Users_BirthDate ? data.Users_BirthDate.split('T')[0] : '');
+            setRegisDate(data.Users_RegisDate ? data.Users_RegisDate.split('T')[0] : '')
+            setImageFile(data.Users_ImageFile || '');
+            setGoogle_Uid(data.Users_Google_Uid || '');
+            setGender_ID(data.UsersGender_ID || '');
+            setRegisType_Name(data.RegisType_Name || '');
+            setUsersType_Name(data.UsersType_Name || '');
+            setIsActive(data.Users_IsActive || '');
         } catch (error) {
             setError("Error fetching customer data.");
             console.error("Error fetching customer:", error);
         } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchCustomer();
-    }, [id]);
+    }, [fetchCustomer]);
 
     const handlePhoneChange = (e) => {
         const value = e.target.value;
-        // ตรวจสอบว่าเป็นตัวเลขและมีความยาว 10 ตัว
         if (/^\d*$/.test(value) && value.length <= 10) {
             setPhone(value);
-            setPhoneError(''); // เคลียร์ข้อความแสดงข้อผิดพลาดเมื่อกรอกข้อมูลถูกต้อง
+            setPhoneError('');
         } else {
             setPhoneError('หมายเลขโทรศัพท์ต้องเป็นตัวเลข 10 หลัก');
         }
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // ตรวจสอบหมายเลขโทรศัพท์อีกครั้งก่อนส่งข้อมูล
         if (Users_Phone.length !== 10) {
             setPhoneError('หมายเลขโทรศัพท์ต้องเป็น 10 หลัก');
-            return; // ไม่ส่งข้อมูลหากหมายเลขโทรศัพท์ไม่ถูกต้อง
+            return;
         }
+        const formattedBirthDate = Users_BirthDate ? new Date(Users_BirthDate).toISOString().split('T')[0] : '';
 
         const updatedCustomer = {
             Users_ID,
@@ -101,7 +92,7 @@ function EditCustomer() {
             Users_LastName,
             Users_Email,
             Users_Phone,
-            Users_BirthDate: Users_BirthDate.split('T')[0], // แปลงให้เป็นวันที่
+            Users_BirthDate,
             Users_RegisDate,
             Users_ImageFile,
             Users_Google_Uid,
@@ -112,25 +103,18 @@ function EditCustomer() {
         };
 
         try {
-            // 1. อัปเดตข้อมูลผู้ใช้
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile/${id}`, updatedCustomer);
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-web/${id}`, updatedCustomer);
             
-            // 2. ตรวจสอบว่ามีไฟล์ใหม่หรือไม่
             if (selectedFile) {
                 const formData = new FormData();
-                formData.append('Profile_Image', selectedFile); // เพิ่มไฟล์ใหม่ที่ถูกเลือก
+                formData.append('Profile_Image', selectedFile);
 
                 const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-image/${id}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data' },
                 });
 
-                // 3. ตรวจสอบว่าการอัปโหลดสำเร็จหรือไม่
                 if (putImageResponse.data.status === true) {
-                    // ส่งคำสั่งลบไฟล์เก่า
-                    const deleteData = { imagePath: Users_ImageFile }; // ส่งชื่อไฟล์ที่ต้องการลบ
-    
+                    const deleteData = { imagePath: Users_ImageFile };
                     try {
                         await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-profile-image/${id}`, { data: deleteData });
                     } catch (deleteError) {
@@ -143,9 +127,10 @@ function EditCustomer() {
                     return;
                 }
             }
-    
+
             setSuccess(true);
-            navigate('/'); // เปลี่ยนไปยังหน้าอื่นหลังจากบันทึกเสร็จ
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
+            navigate('/customer');
         } catch (error) {
             setError("Error updating customer data.");
             console.error("Error updating customer:", error);
@@ -158,21 +143,20 @@ function EditCustomer() {
                 <i 
                     className="bi bi-arrow-left ms-2" 
                     style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
-                    onClick={() => navigate(-1)} // ย้อนกลับไปหน้าก่อน
+                    onClick={() => navigate(-1)}
                 ></i>
-                <h1 className="text-center ms-5">แก้ไขข้อมูลผู้ใช้</h1>
+                <h1 className="text-center ms-5">{loading ? "กำลังโหลดข้อมูล..." : "แก้ไขข้อมูลผู้ใช้"}</h1>
             </div>
             {loading ? (
                 <p>กำลังโหลดข้อมูล...</p>
             ) : (
-                <div style={{ maxHeight: '550px', overflowY: 'auto' }}> {/* เพิ่ม scrollbar */}
+                <div style={{ height: '80vh', overflowY: 'auto' }}>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label className="form-label">User ID</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_Username"
                                 value={Users_ID}
                                 onChange={(e) => setUserID(e.target.value)}
                                 required
@@ -185,9 +169,9 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_Username"
                                 value={Users_Username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                required
                                 readOnly
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
                             />
@@ -197,7 +181,6 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_DisplayName"
                                 value={Users_DisplayName}
                                 onChange={(e) => setDisplayName(e.target.value)}
                                 required
@@ -208,7 +191,6 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_FirstName"
                                 value={Users_FirstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 required
@@ -219,7 +201,6 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_LastName"
                                 value={Users_LastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 required
@@ -230,10 +211,11 @@ function EditCustomer() {
                             <input
                                 type="email"
                                 className="form-control"
-                                name="Users_Email"
                                 value={Users_Email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
                             />
                         </div>
                         <div className="mb-3">
@@ -241,41 +223,110 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="Users_Phone"
                                 value={Users_Phone}
                                 onChange={handlePhoneChange}
                                 required
                             />
-                            {phoneError && <small className="text-danger">{phoneError}</small>} {/* แสดงข้อความแสดงข้อผิดพลาด */}
+                            {phoneError && <small className="text-danger">{phoneError}</small>}
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Birth Date</label>
                             <input
-                                type="date"
+                                type="text"
                                 className="form-control"
-                                name="Users_BirthDate"
                                 value={Users_BirthDate}
                                 onChange={(e) => setBirthDate(e.target.value)}
-                                required
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Image File</label>
+                            <label className="form-label">Registration Date</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Users_RegisDate}
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Image</label>
                             <input
                                 type="file"
                                 className="form-control"
+                                accept="image/*"
                                 onChange={handleFileChange}
                             />
-                            {Users_ImageFile && (
-                                <div className="mt-2">
-                                    <img src={Users_ImageFile} alt="Profile" style={{ width: '100px' }} />
-                                </div>
-                            )}
                         </div>
-                        <button type="submit" className="btn btn-primary">บันทึก</button>
+                        <div className="mb-3">
+                            <label className="form-label">Google UID</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Users_Google_Uid}
+                                onChange={(e) => setGoogle_Uid(e.target.value)}
+                                required
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Gender</label>
+                            <select
+                                className="form-select"
+                                name="UsersGender_ID"
+                                value={UsersGender_ID} // ใช้ค่า UsersGender_ID เพื่อให้ dropdown แสดงค่าที่ถูกเลือก
+                                onChange={(e) => setGender_ID(e.target.value)} // อัปเดต state เมื่อมีการเลือกใหม่
+                                required
+                            >
+                                <option value=''>เลือกเพศ</option> {/* ตัวเลือกว่าง */}
+                                <option value="1">MALE</option>
+                                <option value="2">FEMALE</option>
+                                <option value="3">OTHER</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Registration Type</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={RegisType_Name}
+                                onChange={(e) => setRegisType_Name(e.target.value)}
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">User Type</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={UsersType_Name}
+                                onChange={(e) => setUsersType_Name(e.target.value)}
+                                readOnly
+                                style={{ backgroundColor: '#e9ecef', color: '#495057' }}
+
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Is Active</label>
+                            <select
+                                className="form-select"
+                                value={Users_IsActive}
+                                onChange={(e) => setIsActive(e.target.value)}
+                                required
+                            >
+                                <option value="0">Suspended</option>
+                                <option value="1">Active</option>
+                            </select>
+                        </div>
+                        <button type="submit" className="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                        {error && <p className="text-danger">{error}</p>}
+                        {success && <p className="text-success">Customer updated successfully!</p>}
                     </form>
-                    {error && <div className="alert alert-danger mt-3">{error}</div>}
-                    {success && <div className="alert alert-success mt-3">บันทึกข้อมูลสำเร็จ!</div>}
                 </div>
             )}
         </div>

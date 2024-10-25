@@ -132,7 +132,7 @@ function Editzodiac() {
                     <form onSubmit={handleSubmit}>
                         {/* เพิ่มฟิลด์ Zodiac ID */}
                         <div className="mb-3">
-                            <label className="form-label">Zodiac ID</label>
+                            <label className="form-label" name="zodiacID">Zodiac ID</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -142,7 +142,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Zodiac Name</label>
+                            <label className="form-label" name="zodiacName">Zodiac Name</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -153,7 +153,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Zodiac Detail</label>
+                            <label className="form-label" name="zodiacDetail">Zodiac Detail</label>
                             <textarea
                                 className="form-control"
                                 value={Zodiac_Detail}
@@ -163,7 +163,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Work Topic</label>
+                            <label className="form-label" name="zodiacWorkTopic">Work Topic</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -173,7 +173,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Finance Topic</label>
+                            <label className="form-label" name="zodiacFinanceTopic">Finance Topic</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -183,7 +183,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Love Topic</label>
+                            <label className="form-label" name="zodiacLoveTopic">Love Topic</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -193,7 +193,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Zodiac Score</label>
+                            <label className="form-label" name="zodiacScore">Zodiac Score</label>
                             <input
                                 type="number"
                                 className="form-control"
@@ -204,7 +204,7 @@ function Editzodiac() {
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Image File</label>
+                            <label className="form-label" name="zodiacImageFile">Image File</label>
                             <div className="d-flex">
                                 <input
                                     type="text"
@@ -221,7 +221,7 @@ function Editzodiac() {
                                 />
                             </div>
                         </div>
-                        <button type="submit" className="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                        <button type="submit" className="btn btn-primary" name="saveButton">บันทึกการเปลี่ยนแปลง</button>
                     </form>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
                     {success && <div className="alert alert-success mt-3">บันทึกข้อมูลเรียบร้อยแล้ว</div>}

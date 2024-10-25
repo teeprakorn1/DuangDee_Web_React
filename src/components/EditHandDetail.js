@@ -12,6 +12,10 @@ function EditHandDetail() {
     });
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(null);
+
+
 
     const fetchHandDetail = async () => {
         try {
@@ -33,16 +37,23 @@ function EditHandDetail() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setHandDetail((prevDetail) => ({
-            ...prevDetail,
-            [name]: value
-        }));
+    
+        // ตรวจสอบว่า value เป็นค่าว่างหรืออยู่ในช่วง 0 ถึง 100
+        if (value === '' || (Number(value) >= 0 && Number(value) <= 100)) {
+            setHandDetail((prevDetail) => ({
+                ...prevDetail,
+                [name]: value
+            }));
+        }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-handdetail/${id}, handDetail`);
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-handdetail/${id}`, handDetail);
+            setSuccess(true);
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate('/hand-detail');
         } catch (error) {
             console.error('Error updating hand detail:', error);
@@ -58,7 +69,7 @@ function EditHandDetail() {
 
             <form onSubmit={handleSubmit} className="mt-4">
                 <div className="mb-3">
-                    <label htmlFor="handDetailID" className="form-label">Hand ID</label>
+                    <label htmlFor="handDetailID" className="form-label" name="handDetailID">Hand ID</label>
                     <input 
                         type="text" 
                         className="form-control" 
@@ -71,7 +82,7 @@ function EditHandDetail() {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="handDetailName" className="form-label">Hand Name</label>
+                    <label htmlFor="handDetailName" className="form-label" name="handDetailName">Hand Name</label>
                     <input 
                         type="text" 
                         className="form-control" 
@@ -84,7 +95,7 @@ function EditHandDetail() {
                 </div>
                 
                 <div className="mb-3">
-                    <label htmlFor="handDetailDetail" className="form-label">Description</label>
+                    <label htmlFor="handDetailDetail" className="form-label" name="handDetailDetail">Description</label>
                     <textarea 
                         className="form-control" 
                         id="handDetailDetail" 
@@ -97,7 +108,7 @@ function EditHandDetail() {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="handDetailPercent" className="form-label">Percent</label>
+                    <label htmlFor="handDetailPercent" className="form-label" name="handDetailPercent">Percent</label>
                     <input 
                         type="number" 
                         className="form-control" 
@@ -110,7 +121,9 @@ function EditHandDetail() {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Save Changes</button>
+                <button type="submit" className="btn btn-primary" name="submitButton">บันทึกการเปลี่ยนแปลง</button>
+                {error && <div className="alert alert-danger mt-3">{error}</div>}
+                {success && <div className="alert alert-success mt-3">บันทึกข้อมูลเรียบร้อยแล้ว</div>}
             </form>
         </div>
     );

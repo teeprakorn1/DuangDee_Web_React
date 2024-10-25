@@ -83,7 +83,7 @@ function ShowDataHandDetail() {
                     </div>
 
                     <button className="btn btn-secondary" onClick={handleEdit}>
-                        Edit Hand Detail
+                        ไปยังหน้าแก้ไขข้อมูลรายละเอียดของมือ
                     </button>
                 </div>
             ) : (

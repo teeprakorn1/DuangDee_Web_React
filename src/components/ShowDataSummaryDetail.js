@@ -84,7 +84,7 @@ function ShowDataSummaryDetail() {
                                 className="btn btn-secondary"
                                 onClick={() => navigate(`/edit-summary-detail/${id}`)}
                             >
-                                Edit DataSummary Detail
+                               ไปยังหน้าแก้ไขข้อมูล
                             </button>
                         </div>
                     </div>

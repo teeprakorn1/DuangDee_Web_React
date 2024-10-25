@@ -7,7 +7,6 @@ function EditTarotCard() {
     const navigate = useNavigate();
 
     const [Card_Name, setCardName] = useState('');
-    const [Card_Detail, setCardDetail] = useState('');
     const [Card_WorkTopic, setCardWorkTopic] = useState('');
     const [Card_FinanceTopic, setCardFinanceTopic] = useState('');
     const [Card_LoveTopic, setCardLoveTopic] = useState('');
@@ -26,7 +25,6 @@ function EditTarotCard() {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card/${id}`);
             const data = response.data;
             setCardName(data.Card_Name);
-            setCardDetail(data.Card_Detail);
             setCardWorkTopic(data.Card_WorkTopic);
             setCardFinanceTopic(data.Card_FinanceTopic);
             setCardLoveTopic(data.Card_LoveTopic);
@@ -64,7 +62,6 @@ function EditTarotCard() {
         e.preventDefault();
         const updatedCard = {
             Card_Name,
-            Card_Detail,
             Card_WorkTopic,
             Card_FinanceTopic,
             Card_LoveTopic,
@@ -93,7 +90,7 @@ function EditTarotCard() {
             }
 
             setSuccess(true);
-            alert('Tarot card updated successfully');
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate(`/edit-tarot-card/${id}`);
 
         } catch (error) {
@@ -110,88 +107,94 @@ function EditTarotCard() {
             ) : (
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">Card Name</label>
+                        <label className="form-label" htmlFor="cardName">Card Name</label>
                         <input
                             type="text"
                             className="form-control"
+                            id="cardName" // เพิ่ม id สำหรับ input
+                            name="cardName" // เพิ่ม name สำหรับ input
                             value={Card_Name}
                             onChange={(e) => setCardName(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Card Detail</label>
-                        <textarea
-                            className="form-control"
-                            value={Card_Detail}
-                            onChange={(e) => setCardDetail(e.target.value)}
-                            rows="3"
-                            required
-                        ></textarea>
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Work Topic</label>
+                        <label className="form-label" htmlFor="cardWorkTopic">Work Topic</label>
                         <input
                             type="text"
                             className="form-control"
+                            id="cardWorkTopic" // เพิ่ม id สำหรับ input
+                            name="cardWorkTopic" // เพิ่ม name สำหรับ input
                             value={Card_WorkTopic}
                             onChange={(e) => setCardWorkTopic(e.target.value)}
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Finance Topic</label>
+                        <label className="form-label" htmlFor="cardFinanceTopic">Finance Topic</label>
                         <input
                             type="text"
                             className="form-control"
+                            id="cardFinanceTopic" // เพิ่ม id สำหรับ input
+                            name="cardFinanceTopic" // เพิ่ม name สำหรับ input
                             value={Card_FinanceTopic}
                             onChange={(e) => setCardFinanceTopic(e.target.value)}
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Love Topic</label>
+                        <label className="form-label" htmlFor="cardLoveTopic">Love Topic</label>
                         <input
                             type="text"
                             className="form-control"
+                            id="cardLoveTopic" // เพิ่ม id สำหรับ input
+                            name="cardLoveTopic" // เพิ่ม name สำหรับ input
                             value={Card_LoveTopic}
                             onChange={(e) => setCardLoveTopic(e.target.value)}
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Work Score</label>
+                        <label className="form-label" htmlFor="cardWorkScore">Work Score</label>
                         <input
                             type="number"
                             className="form-control"
+                            id="cardWorkScore" // เพิ่ม id สำหรับ input
+                            name="cardWorkScore" // เพิ่ม name สำหรับ input
                             value={Card_WorkScore}
                             onChange={handleScoreChange(setCardWorkScore)}
                             max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Finance Score</label>
+                        <label className="form-label" htmlFor="cardFinanceScore">Finance Score</label>
                         <input
                             type="number"
                             className="form-control"
+                            id="cardFinanceScore" // เพิ่ม id สำหรับ input
+                            name="cardFinanceScore" // เพิ่ม name สำหรับ input
                             value={Card_FinanceScore}
                             onChange={handleScoreChange(setCardFinanceScore)}
                             max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Love Score</label>
+                        <label className="form-label" htmlFor="cardLoveScore">Love Score</label>
                         <input
                             type="number"
                             className="form-control"
+                            id="cardLoveScore" // เพิ่ม id สำหรับ input
+                            name="cardLoveScore" // เพิ่ม name สำหรับ input
                             value={Card_LoveScore}
                             onChange={handleScoreChange(setCardLoveScore)}
                             max="101" // Limit value to 100
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Card Image</label>
+                        <label className="form-label" htmlFor="cardImageFile">Card Image</label>
                         <div className="d-flex align-items-center">
                             <input
                                 type="text"
                                 className="form-control me-2"
+                                id="cardImageFile" // เพิ่ม id สำหรับ input
+                                name="cardImageFile" // เพิ่ม name สำหรับ input
                                 value={Card_ImageFile}
                                 readOnly
                             />
@@ -200,12 +203,13 @@ function EditTarotCard() {
                                 className="form-control"
                                 accept="image/*"
                                 onChange={handleFileChange}
+                                name="selectedFile" // เพิ่ม name สำหรับ input file
                             />
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Save Changes</button>
+                    <button type="submit" className="btn btn-primary" name="saveButton">บันทึกการเปลี่ยนแปลง</button>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
-                    {success && <div className="alert alert-success mt-3">Tarot card updated successfully</div>}
+                    {success && <div className="alert alert-success mt-3">บันทึกข้อมูลเรียบร้อยแล้ว</div>}
                 </form>
             )}
         </div>

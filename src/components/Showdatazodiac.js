@@ -83,7 +83,7 @@ function ShowDataZodiac() {
                                     className="btn btn-secondary" // Button style
                                     onClick={() => navigate(`/edit-zodiac/${id}`)} // นำทางไปยังหน้า Editzodiac
                                 >
-                                    Edit Zodiac
+                                    ไปยังหน้าแก้ไขราศี 
                                 </button>
                             </div>
                         </div>

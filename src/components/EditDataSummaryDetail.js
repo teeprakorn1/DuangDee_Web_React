@@ -10,6 +10,8 @@ function EditDataSummaryDetail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [success, setSuccess] = useState(false);
+
 
     const fetchSummaryDetail = async () => {
         try {
@@ -36,10 +38,18 @@ function EditDataSummaryDetail() {
                 SummaryDetail_Detail,
                 SummaryDetail_MinPercent,
             });
-            alert(response.data.message);
+            setSuccess(true);
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate('/summary-detail');
         } catch (error) {
             console.error("Error updating summary detail:", error);
+        }
+    };
+    const handleMinPercentChange = (e) => {
+        const value = e.target.value; // ค่าที่ผู้ใช้กรอก
+        // ตรวจสอบว่าค่าที่กรอกเป็นค่าว่างหรืออยู่ในช่วง 0 ถึง 100
+        if (value === '' || (Number(value) >= 0 && Number(value) <= 100)) {
+            setSummaryDetail({ ...summaryDetail, SummaryDetail_MinPercent: value }); // อัปเดตสถานะ
         }
     };
 
@@ -58,39 +68,40 @@ function EditDataSummaryDetail() {
                 summaryDetail && (
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label className="form-label">ชื่อสรุป:</label>
+                            <label className="form-label" htmlFor="summaryDetailName">ชื่อสรุป:</label>
                             <input 
                                 type="text" 
                                 className="form-control"
+                                name="summaryDetailName" // เพิ่ม name สำหรับ input
                                 value={summaryDetail.SummaryDetail_Name}
                                 onChange={(e) => setSummaryDetail({ ...summaryDetail, SummaryDetail_Name: e.target.value })}
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">รายละเอียด:</label>
+                            <label className="form-label" htmlFor="summaryDetailDetail">รายละเอียด:</label>
                             <textarea 
                                 className="form-control"
+                                name="summaryDetailDetail" // เพิ่ม name สำหรับ textarea
                                 value={summaryDetail.SummaryDetail_Detail}
                                 onChange={(e) => setSummaryDetail({ ...summaryDetail, SummaryDetail_Detail: e.target.value })}
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">คะแนนขั้นต่ำ:</label>
+                            <label className="form-label" htmlFor="summaryDetailMinPercent">คะแนนขั้นต่ำ:</label>
                             <input 
                                 type="number" 
                                 className="form-control"
+                                name="summaryDetailMinPercent"
                                 value={summaryDetail.SummaryDetail_MinPercent}
-                                onChange={(e) => setSummaryDetail({ ...summaryDetail, SummaryDetail_MinPercent: e.target.value })}
+                                onChange={handleMinPercentChange} // ใช้ฟังก์ชันที่สร้างขึ้น
+                                min="0"
+                                max="100"
+                                required
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary">บันทึก</button>
-                        <button 
-                            type="button" 
-                            className="btn btn-secondary ms-2" 
-                            onClick={() => navigate('/summary-detail')}
-                        >
-                            ยกเลิก
-                        </button>
+                        <button type="submit" className="btn btn-primary" name="submitButton">บันทึกข้อมูลการเปลี่ยนแปลง</button>
+                        {error && <div className="alert alert-danger mt-3">{error}</div>}
+                        {success && <div className="alert alert-success mt-3">บันทึกข้อมูลเรียบร้อยแล้ว</div>}
                     </form>
                 )
             )}

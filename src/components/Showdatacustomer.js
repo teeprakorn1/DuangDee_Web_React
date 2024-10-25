@@ -169,7 +169,7 @@ function Showdatacustomer() {
                             className="btn btn-secondary" 
                             onClick={() => navigate(`/edit-customer/${id}`)} // เปลี่ยนเส้นทางไปยังหน้า edit
                         >
-                            Edit Customer
+                            ไปยังหน้าแก้ไขข้อมูลผู้ใช้
                         </button>
                     </div>
                 </div>

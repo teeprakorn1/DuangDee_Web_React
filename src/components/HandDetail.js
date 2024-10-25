@@ -33,10 +33,12 @@ function HandDetail() {
     const filteredHandDetails = handDetails.filter(hand => {
         const handName = hand.HandDetail_Name || '';
         const handDescription = hand.HandDetail_Detail || '';
+        const handId = hand.HandDetail_ID.toString(); // Convert ID to string for comparison
 
         return (
             handName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            handDescription.toLowerCase().includes(searchTerm.toLowerCase())
+            handDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            handId.includes(searchTerm) // Search by ID
         );
     });
 
@@ -78,7 +80,11 @@ function HandDetail() {
                                     <tr key={hand.HandDetail_ID}>
                                         <td>{hand.HandDetail_ID}</td>
                                         <td>{hand.HandDetail_Name}</td>
-                                        <td>{hand.HandDetail_Detail}</td>
+                                        <td style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}>
+                                            {hand.HandDetail_Detail.length > 100 
+                                                ? `${hand.HandDetail_Detail.substring(0, 100)}...` 
+                                                : hand.HandDetail_Detail}
+                                        </td>
                                         <td>{hand.HandDetail_MinPercent}</td>
                                         <td>
                                             <div className="d-flex">

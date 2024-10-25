@@ -47,7 +47,6 @@ function TarotPage() {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Card Name</th>
-                            <th scope="col">Detail</th>
                             <th scope="col">Work</th>
                             <th scope="col">Finance</th>
                             <th scope="col">Love</th>
@@ -64,7 +63,6 @@ function TarotPage() {
                                 <tr key={card.Card_ID}>
                                     <td>{index + 1}</td>
                                     <td>{card.Card_Name}</td>
-                                    <td>{card.Card_Detail}</td>
                                     <td>{card.Card_WorkTopic}</td>
                                     <td>{card.Card_FinanceTopic}</td>
                                     <td>{card.Card_LoveTopic}</td>
