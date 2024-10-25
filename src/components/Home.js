@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Pie, Line } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from "chart.js";
 import Nav from "./Nav";
 
-function Home({ Toggle }) { // รับ Toggle เป็น props
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title);
+
+function Home({ Toggle }) {
     const [usersInSystem, setUsersInSystem] = useState(0);
     const [usersOnline, setUsersOnline] = useState(0);
     const [usersOffline, setUsersOffline] = useState(0);
+    const [playCardData, setPlayCardData] = useState([]);
+    const [playHandData, setPlayHandData] = useState([]);
+    const [totalPlayCards, setTotalPlayCards] = useState(0);
+    const [totalPlayHands, setTotalPlayHands] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,7 +25,7 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
                     axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-count-users-online`),
                     axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-count-users-offline`)
                 ]);
-    
+
                 setUsersInSystem(systemResponse.data.Count);
                 setUsersOnline(onlineResponse.data.Count);
                 setUsersOffline(offlineResponse.data.Count);
@@ -27,19 +35,113 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
                 setLoading(false);
             }
         };
-    
+
+        const fetchPlayData = async () => {
+            try {
+                const [playCardsResponse, playHandsResponse] = await Promise.all([
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard`),
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand`)
+                ]);
+
+                setTotalPlayCards(playCardsResponse.data.Count || 0);
+                setTotalPlayHands(playHandsResponse.data.Count || 0);
+            } catch (err) {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูลการเล่น:", err);
+            }
+        };
+
+        const fetchMonthlyData = async () => {
+            try {
+                const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                const year = new Date().getFullYear();
+                const playCardCounts = [];
+                const playHandCounts = [];
+        
+                for (let month of months) {
+                    const [cardResponse, handResponse] = await Promise.all([
+                        axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard-date`, {
+                            params: { Month: month, Year: year } // ใช้พารามิเตอร์ตัวพิมพ์เล็กตามมาตรฐาน
+                        }),
+                        axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand-date`, {
+                            params: { Month: month, Year: year } // ใช้พารามิเตอร์ตัวพิมพ์เล็กตามมาตรฐาน
+                        })
+                    ]);
+        
+                    playCardCounts.push(cardResponse.data.Count || 0);
+                    playHandCounts.push(handResponse.data.Count || 0);
+                }
+        
+                setPlayCardData(playCardCounts);
+                setPlayHandData(playHandCounts);
+            } catch (err) {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูลรายเดือน:", err);
+            }
+        };
+        
+
         fetchUserData();
+        fetchPlayData();
+        fetchMonthlyData();
     }, []);
-    
-    if (loading) return <div>Loading...</div>;
+
+    if (loading) return <div>กำลังโหลดข้อมูล...</div>;
     if (error) return <div>{error}</div>;
+
+    // ข้อมูลสำหรับ Pie Chart
+    const pieData = {
+        labels: ["Play Cards", "Play Hands"],
+        datasets: [
+            {
+                label: "Play Data",
+                data: [totalPlayCards, totalPlayHands],
+                backgroundColor: ["#36A2EB", "#FF6384"],
+                hoverBackgroundColor: ["#36A2EB", "#FF6384"],
+            },
+        ],
+    };
+
+    // ข้อมูลสำหรับ Line Graph
+    const lineData = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [
+            {
+                label: "Play Cards",
+                data: playCardData,
+                borderColor: "#36A2EB",
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                fill: true,
+            },
+            {
+                label: "Play Hands",
+                data: playHandData,
+                borderColor: "#FF6384",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                fill: true,
+            },
+        ],
+    };
+
+    // ตัวเลือกสำหรับ Line Graph
+    const lineOptions = {
+        scales: {
+            y: {
+                ticks: {
+                    stepSize: 5, // ห่างค่าละ 5
+                    callback: function (value) {
+                        return Number.isInteger(value) ? value : null;
+                    }
+                },
+                beginAtZero: true // เริ่มจาก 0
+            }
+        }
+    };
 
     return (
         <div className='px-3'>
             <Nav onToggle={Toggle} /> {/* ส่ง Toggle ไปยัง Nav */}
             <div className='container-fluid'>
                 <div className='row g-3 my-2'>
-                    {/* Users in System Card */}
+                    {/* การ์ดแสดงจำนวนผู้ใช้งานในระบบ */}
                     <div className='col-md-4'>
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
@@ -51,7 +153,7 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
                             </div>
                         </div>
                     </div>
-                    {/* Users Online Card */}
+                    {/* การ์ดแสดงจำนวนผู้ใช้งานที่ออนไลน์ */}
                     <div className='col-md-4'>
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
@@ -63,7 +165,7 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
                             </div>
                         </div>
                     </div>
-                    {/* Users Offline Card */}
+                    {/* การ์ดแสดงจำนวนผู้ใช้งานที่ถูกระงับ */}
                     <div className='col-md-4'>
                         <div className='card shadow-sm rounded'>
                             <div className='card-body d-flex justify-content-around align-items-center'>
@@ -77,39 +179,32 @@ function Home({ Toggle }) { // รับ Toggle เป็น props
                     </div>
                 </div>
 
-                {/* Data Users Table */}
-                <div className="table-responsive">
-                    <table className='table caption-top bg-white rounded mt-4 shadow-sm'>
-                        <caption className='text-dark fs-4'>Data Users</caption>
-                        <thead>
-                            <tr className='table-light'>
-                                <th scope="col">#</th>
-                                <th scope="col">FirstName</th>
-                                <th scope="col">LastName</th>
-                                <th scope="col">Gmail</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>ทีปกร</td>
-                                <td>คุ้มวงศ์</td>
-                                <td>teeprakorn@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>ภูริต</td>
-                                <td>เจนสาริกิจ</td>
-                                <td>phurit@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>จารุกัญ</td>
-                                <td>ทองหล่อ</td>
-                                <td>jarugang@gmail.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                {/* Pie Chart สำหรับแสดง Play Cards และ Play Hands */}
+                <div className='row g-3 my-2'>
+                    <div className='col-md-6 offset-md-3'>
+                        <div className='card shadow-sm rounded'>
+                            <div className='card-body'>
+                                <h3 className='fs-4 text-center'>Play Cards vs Play Hands</h3>
+                                <div style={{ width: "300px", height: "300px", margin: "0 auto" }}>
+                                    <Pie data={pieData} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Line Graph สำหรับแสดงข้อมูล Play Cards และ Play Hands รายเดือน */}
+                <div className='row g-3 my-2'>
+                    <div className='col-md-10 offset-md-1'>
+                        <div className='card shadow-sm rounded'>
+                            <div className='card-body'>
+                                <h3 className='fs-4 text-center'>Play Cards vs Play Hands (Monthly)</h3>
+                                <div style={{ width: "100%", height: "400px" }}>
+                                    <Line data={lineData} options={lineOptions} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

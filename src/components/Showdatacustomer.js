@@ -57,6 +57,12 @@ function Showdatacustomer() {
         fetchCustomer();
     }, [id]);
 
+    // กำหนดสีใหม่ที่นี่
+    const inputStyle = {
+        backgroundColor: '#f5f5f5', // สีพื้นหลังใหม่
+        color: '#333333', // สีข้อความใหม่
+    };
+
     return (
         <div className="container mt-4">
             <div className="d-flex align-items-center mb-4">
@@ -75,99 +81,69 @@ function Showdatacustomer() {
                 <div style={{ maxHeight: '550px', overflowY: 'auto' }}>
                     <div className="mb-3">
                         <label className="form-label">User ID</label>
-                        <div className="form-control-custom">
-                            {Users_ID}
-                        </div>
+                        <input className="form-control" value={Users_ID} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Username</label>
-                        <div className="form-control-custom">
-                            {Users_Username}
-                        </div>
+                        <input className="form-control" value={Users_Username} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Display Name</label>
-                        <div className="form-control-custom">
-                            {Users_DisplayName}
-                        </div>
+                        <input className="form-control" value={Users_DisplayName} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">First Name</label>
-                        <div className="form-control-custom">
-                            {Users_FirstName}
-                        </div>
+                        <input className="form-control" value={Users_FirstName} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Last Name</label>
-                        <div className="form-control-custom">
-                            {Users_LastName}
-                        </div>
+                        <input className="form-control" value={Users_LastName} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Email</label>
-                        <div className="form-control-custom">
-                            {Users_Email}
-                        </div>
+                        <input className="form-control" value={Users_Email} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Phone</label>
-                        <div className="form-control-custom">
-                            {Users_Phone}
-                        </div>
+                        <input className="form-control" value={Users_Phone} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Birth Date</label>
-                        <div className="form-control-custom">
-                            {Users_BirthDate}
-                        </div>
+                        <input className="form-control" value={Users_BirthDate} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Registration Date</label>
-                        <div className="form-control-custom">
-                            {Users_RegisDate}
-                        </div>
+                        <input className="form-control" value={Users_RegisDate} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Image File</label>
-                        <div className="form-control-custom">
-                            {Users_ImageFile}
-                        </div>
+                        <input className="form-control" value={Users_ImageFile} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Google UID</label>
-                        <div className="form-control-custom">
-                            {Users_Google_Uid}
-                        </div>
+                        <input className="form-control" value={Users_Google_Uid} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Gender</label>
-                        <div className="form-control-custom">
-                            {UsersGender_ID === "1" ? "MALE" : UsersGender_ID === "2" ? "FEMALE" : "OTHER"}
-                        </div>
+                        <input className="form-control" value={UsersGender_ID === "1" ? "MALE" : UsersGender_ID === "2" ? "FEMALE" : "OTHER"} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Registration Type ID</label>
-                        <div className="form-control-custom">
-                            {RegisType_Name}
-                        </div>
+                        <input className="form-control" value={RegisType_Name} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">User Type ID</label>
-                        <div className="form-control-custom">
-                            {UsersType_Name}
-                        </div>
+                        <input className="form-control" value={UsersType_Name} readOnly style={inputStyle} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Is Active</label>
-                        <div className="form-control-custom">
-                            {Users_IsActive === "1" ? "Active" : "Suspended"}
-                        </div>
+                        <input className="form-control" value={Users_IsActive === "1" ? "Active" : "Suspended"} readOnly style={inputStyle} />
                     </div>
                     {/* Edit Button */}
                     <div className="mt-4">
                         <button 
                             className="btn btn-secondary" 
-                            onClick={() => navigate(`/edit-customer/${id}`)} // เปลี่ยนเส้นทางไปยังหน้า edit
+                            onClick={() => navigate(`/edit/${id}`)} // เปลี่ยนเส้นทางไปยังหน้า edit
                         >
                             ไปยังหน้าแก้ไขข้อมูลผู้ใช้
                         </button>

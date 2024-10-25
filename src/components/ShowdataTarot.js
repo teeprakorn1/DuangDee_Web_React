@@ -93,7 +93,7 @@ function Showdatatarot() {
                         <div className="mt-4">
                             <button 
                                 className="btn btn-secondary" // You can change this class to match your desired button style
-                                onClick={() => navigate(`/edit-tarot/${id}`)} // นำทางไปยังหน้า EditTarot
+                                onClick={() => navigate(`/edit-tarot-card/${id}`)} // นำทางไปยังหน้า EditTarot
                             >
                                 ไปยังหน้าแก้ไข Tarot
                             </button>

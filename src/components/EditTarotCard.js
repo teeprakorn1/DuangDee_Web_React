@@ -91,7 +91,7 @@ function EditTarotCard() {
 
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
-            navigate(`/edit-tarot-card/${id}`);
+            navigate(`/tarot`);
 
         } catch (error) {
             setError("Error updating tarot card.");
