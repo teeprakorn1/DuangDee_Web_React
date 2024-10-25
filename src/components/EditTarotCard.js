@@ -69,25 +69,33 @@ function EditTarotCard() {
             Card_FinanceScore,
             Card_LoveScore,
         };
-
+    
         try {
+            // อัพเดตข้อมูลการ์ด
             await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card/${id}`, updatedCard);
-
+    
+            // อัพเดตรูปภาพถ้ามีการเปลี่ยนแปลง
             if (selectedFile) {
                 const formData = new FormData();
-                formData.append('Card_ImageFile', selectedFile);
-
+                formData.append('Card_Image', selectedFile);
+    
                 const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-
+    
                 if (putImageResponse.data.status !== true) {
                     setError("Error updating card image.");
                     return;
                 }
+    
+                // ลบรูปภาพเดิมหลังจากที่อัพเดตเสร็จ
+                await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-card-image/${id}`, {
+                    data: { imagePath: Card_ImageFile }, // ส่ง imagePath เดิมไปใน body
+                });
             }
+    
 
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
@@ -111,8 +119,8 @@ function EditTarotCard() {
                         <input
                             type="text"
                             className="form-control"
-                            id="cardName" // เพิ่ม id สำหรับ input
-                            name="cardName" // เพิ่ม name สำหรับ input
+                            id="cardName"
+                            name="cardName"
                             value={Card_Name}
                             onChange={(e) => setCardName(e.target.value)}
                             required
@@ -123,8 +131,8 @@ function EditTarotCard() {
                         <input
                             type="text"
                             className="form-control"
-                            id="cardWorkTopic" // เพิ่ม id สำหรับ input
-                            name="cardWorkTopic" // เพิ่ม name สำหรับ input
+                            id="cardWorkTopic"
+                            name="cardWorkTopic"
                             value={Card_WorkTopic}
                             onChange={(e) => setCardWorkTopic(e.target.value)}
                         />
@@ -134,8 +142,8 @@ function EditTarotCard() {
                         <input
                             type="text"
                             className="form-control"
-                            id="cardFinanceTopic" // เพิ่ม id สำหรับ input
-                            name="cardFinanceTopic" // เพิ่ม name สำหรับ input
+                            id="cardFinanceTopic"
+                            name="cardFinanceTopic"
                             value={Card_FinanceTopic}
                             onChange={(e) => setCardFinanceTopic(e.target.value)}
                         />
@@ -145,8 +153,8 @@ function EditTarotCard() {
                         <input
                             type="text"
                             className="form-control"
-                            id="cardLoveTopic" // เพิ่ม id สำหรับ input
-                            name="cardLoveTopic" // เพิ่ม name สำหรับ input
+                            id="cardLoveTopic"
+                            name="cardLoveTopic"
                             value={Card_LoveTopic}
                             onChange={(e) => setCardLoveTopic(e.target.value)}
                         />
@@ -156,11 +164,11 @@ function EditTarotCard() {
                         <input
                             type="number"
                             className="form-control"
-                            id="cardWorkScore" // เพิ่ม id สำหรับ input
-                            name="cardWorkScore" // เพิ่ม name สำหรับ input
+                            id="cardWorkScore"
+                            name="cardWorkScore"
                             value={Card_WorkScore}
                             onChange={handleScoreChange(setCardWorkScore)}
-                            max="101" // Limit value to 100
+                            max="101"
                         />
                     </div>
                     <div className="mb-3">
@@ -168,11 +176,11 @@ function EditTarotCard() {
                         <input
                             type="number"
                             className="form-control"
-                            id="cardFinanceScore" // เพิ่ม id สำหรับ input
-                            name="cardFinanceScore" // เพิ่ม name สำหรับ input
+                            id="cardFinanceScore"
+                            name="cardFinanceScore"
                             value={Card_FinanceScore}
                             onChange={handleScoreChange(setCardFinanceScore)}
-                            max="101" // Limit value to 100
+                            max="101"
                         />
                     </div>
                     <div className="mb-3">
@@ -180,11 +188,11 @@ function EditTarotCard() {
                         <input
                             type="number"
                             className="form-control"
-                            id="cardLoveScore" // เพิ่ม id สำหรับ input
-                            name="cardLoveScore" // เพิ่ม name สำหรับ input
+                            id="cardLoveScore"
+                            name="cardLoveScore"
                             value={Card_LoveScore}
                             onChange={handleScoreChange(setCardLoveScore)}
-                            max="101" // Limit value to 100
+                            max="101"
                         />
                     </div>
                     <div className="mb-3">
@@ -193,8 +201,8 @@ function EditTarotCard() {
                             <input
                                 type="text"
                                 className="form-control me-2"
-                                id="cardImageFile" // เพิ่ม id สำหรับ input
-                                name="cardImageFile" // เพิ่ม name สำหรับ input
+                                id="cardImageFile"
+                                name="cardImageFile"
                                 value={Card_ImageFile}
                                 readOnly
                             />
@@ -203,7 +211,7 @@ function EditTarotCard() {
                                 className="form-control"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                name="selectedFile" // เพิ่ม name สำหรับ input file
+                                name="Card_ImageFile"
                             />
                         </div>
                     </div>

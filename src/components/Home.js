@@ -14,6 +14,8 @@ function Home({ Toggle }) {
     const [playHandData, setPlayHandData] = useState([]);
     const [totalPlayCards, setTotalPlayCards] = useState(0);
     const [totalPlayHands, setTotalPlayHands] = useState(0);
+
+    // Define loading and error states here
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -52,32 +54,27 @@ function Home({ Toggle }) {
 
         const fetchMonthlyData = async () => {
             try {
-                const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                const year = new Date().getFullYear();
-                const playCardCounts = [];
-                const playHandCounts = [];
-        
-                for (let month of months) {
-                    const [cardResponse, handResponse] = await Promise.all([
-                        axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard-date`, {
-                            params: { Month: month, Year: year } // ใช้พารามิเตอร์ตัวพิมพ์เล็กตามมาตรฐาน
-                        }),
-                        axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand-date`, {
-                            params: { Month: month, Year: year } // ใช้พารามิเตอร์ตัวพิมพ์เล็กตามมาตรฐาน
-                        })
-                    ]);
-        
-                    playCardCounts.push(cardResponse.data.Count || 0);
-                    playHandCounts.push(handResponse.data.Count || 0);
-                }
-        
+                const [cardResponse, handResponse] = await Promise.all([
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard-by-month`),
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand-by-month`)
+                ]);
+
+                const playCardCounts = Array(12).fill(0);
+                const playHandCounts = Array(12).fill(0);
+
+                cardResponse.data.data.forEach(item => {
+                    playCardCounts[item.Month - 1] = item.Count;
+                });
+                handResponse.data.data.forEach(item => {
+                    playHandCounts[item.Month - 1] = item.Count;
+                });
+
                 setPlayCardData(playCardCounts);
                 setPlayHandData(playHandCounts);
             } catch (err) {
                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูลรายเดือน:", err);
             }
         };
-        
 
         fetchUserData();
         fetchPlayData();
@@ -126,24 +123,24 @@ function Home({ Toggle }) {
         scales: {
             y: {
                 ticks: {
-                    stepSize: 5, // ห่างค่าละ 5
+                    stepSize: 5,
                     callback: function (value) {
                         return Number.isInteger(value) ? value : null;
                     }
                 },
-                beginAtZero: true // เริ่มจาก 0
+                beginAtZero: true
             }
         }
     };
 
     return (
         <div className='px-3'>
-            <Nav onToggle={Toggle} /> {/* ส่ง Toggle ไปยัง Nav */}
+            <Nav onToggle={Toggle} />
             <div className='container-fluid'>
+                {/* Cards for users */}
                 <div className='row g-3 my-2'>
-                    {/* การ์ดแสดงจำนวนผู้ใช้งานในระบบ */}
                     <div className='col-md-4'>
-                        <div className='card shadow-sm rounded'>
+                        <div className='card shadow-sm rounded' style={{ backgroundColor: "#f8f9fa" }}>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
                                     <h3 className='fs-2'>{usersInSystem}</h3>
@@ -153,9 +150,8 @@ function Home({ Toggle }) {
                             </div>
                         </div>
                     </div>
-                    {/* การ์ดแสดงจำนวนผู้ใช้งานที่ออนไลน์ */}
                     <div className='col-md-4'>
-                        <div className='card shadow-sm rounded'>
+                        <div className='card shadow-sm rounded' style={{ backgroundColor: "#f8f9fa" }}>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
                                     <h3 className='fs-2'>{usersOnline}</h3>
@@ -165,9 +161,8 @@ function Home({ Toggle }) {
                             </div>
                         </div>
                     </div>
-                    {/* การ์ดแสดงจำนวนผู้ใช้งานที่ถูกระงับ */}
                     <div className='col-md-4'>
-                        <div className='card shadow-sm rounded'>
+                        <div className='card shadow-sm rounded' style={{ backgroundColor: "#f8f9fa" }}>
                             <div className='card-body d-flex justify-content-around align-items-center'>
                                 <div>
                                     <h3 className='fs-2'>{usersOffline}</h3>
@@ -179,9 +174,10 @@ function Home({ Toggle }) {
                     </div>
                 </div>
 
-                {/* Pie Chart สำหรับแสดง Play Cards และ Play Hands */}
+                {/* Combined Pie and Line Graph Row */}
                 <div className='row g-3 my-2'>
-                    <div className='col-md-6 offset-md-3'>
+                    {/* Pie Chart */}
+                    <div className='col-md-6'>
                         <div className='card shadow-sm rounded'>
                             <div className='card-body'>
                                 <h3 className='fs-4 text-center'>Play Cards vs Play Hands</h3>
@@ -191,11 +187,9 @@ function Home({ Toggle }) {
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Line Graph สำหรับแสดงข้อมูล Play Cards และ Play Hands รายเดือน */}
-                <div className='row g-3 my-2'>
-                    <div className='col-md-10 offset-md-1'>
+                    {/* Line Graph */}
+                    <div className='col-md-6'>
                         <div className='card shadow-sm rounded'>
                             <div className='card-body'>
                                 <h3 className='fs-4 text-center'>Play Cards vs Play Hands (Monthly)</h3>

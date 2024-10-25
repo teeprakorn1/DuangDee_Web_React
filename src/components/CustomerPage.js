@@ -74,7 +74,7 @@ function CustomerPage() {
                                 <td>{customer.Users_Phone}</td>
                                 <td>
                                     <img 
-                                        src={customer.Users_ImageUrl ? `${process.env.REACT_APP_BASE_URL}${customer.Users_ImageUrl}` : 'URL รูปภาพ fallback'} 
+                                        src={customer.Users_ImageFile ? `${process.env.REACT_APP_BASE_URL}${customer.Users_ImageFile}` : 'URL รูปภาพ fallback'} 
                                         alt={customer.Users_Username} 
                                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }} 
                                     />
