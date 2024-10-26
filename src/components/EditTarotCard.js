@@ -139,6 +139,7 @@ function EditTarotCard() {
                             name="cardWorkTopic"
                             value={Card_WorkTopic}
                             onChange={(e) => setCardWorkTopic(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-3">
@@ -150,6 +151,7 @@ function EditTarotCard() {
                             name="cardFinanceTopic"
                             value={Card_FinanceTopic}
                             onChange={(e) => setCardFinanceTopic(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-3">
@@ -161,6 +163,7 @@ function EditTarotCard() {
                             name="cardLoveTopic"
                             value={Card_LoveTopic}
                             onChange={(e) => setCardLoveTopic(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-3">
@@ -173,6 +176,7 @@ function EditTarotCard() {
                             value={Card_WorkScore}
                             onChange={handleScoreChange(setCardWorkScore)}
                             max="101"
+                            required
                         />
                     </div>
                     <div className="mb-3">
@@ -185,6 +189,7 @@ function EditTarotCard() {
                             value={Card_FinanceScore}
                             onChange={handleScoreChange(setCardFinanceScore)}
                             max="101"
+                            required
                         />
                     </div>
                     <div className="mb-3">
@@ -197,6 +202,7 @@ function EditTarotCard() {
                             value={Card_LoveScore}
                             onChange={handleScoreChange(setCardLoveScore)}
                             max="101"
+                            required
                         />
                     </div>
                     <div className="mb-3">
