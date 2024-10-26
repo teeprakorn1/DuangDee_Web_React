@@ -33,8 +33,14 @@ function ShowDataSummaryDetail() {
 
     return (
         <div className="container mt-4">
-            <h2 className="text-dark text-center mb-4">ข้อมูลสรุป</h2>
-
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // นำทางไปยังหน้าที่ก่อนหน้านี้
+                ></i>
+                <h2 className="text-dark ms-3">ข้อมูลสรุป</h2>
+            </div>
             {loading ? (
                 <div className="text-center">
                     <div className="spinner-border" role="status">

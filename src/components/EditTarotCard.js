@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa'; // Font Awesome back icon
 
 function EditTarotCard() {
     const { id } = useParams(); // Get the Card_ID from the URL
@@ -71,10 +72,8 @@ function EditTarotCard() {
         };
     
         try {
-            // อัพเดตข้อมูลการ์ด
             await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card/${id}`, updatedCard);
     
-            // อัพเดตรูปภาพถ้ามีการเปลี่ยนแปลง
             if (selectedFile) {
                 const formData = new FormData();
                 formData.append('Card_Image', selectedFile);
@@ -90,13 +89,11 @@ function EditTarotCard() {
                     return;
                 }
     
-                // ลบรูปภาพเดิมหลังจากที่อัพเดตเสร็จ
                 await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-card-image/${id}`, {
-                    data: { imagePath: Card_ImageFile }, // ส่ง imagePath เดิมไปใน body
+                    data: { imagePath: Card_ImageFile },
                 });
             }
     
-
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate(`/tarot`);
@@ -109,7 +106,14 @@ function EditTarotCard() {
 
     return (
         <div className="container mt-4" style={{ height: '80vh', overflowY: 'auto' }}>
-            <h1 className="text-center">Edit Tarot Card</h1>
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // นำทางไปยังหน้าที่ก่อนหน้านี้
+                ></i>
+                <h1 className="text-center ms-5">แก้ไขข้อมูลไพ่ทาโร่</h1>
+            </div>
             {loading ? (
                 <p>Loading data...</p>
             ) : (

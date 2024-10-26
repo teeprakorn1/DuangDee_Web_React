@@ -32,8 +32,14 @@ function ShowDataHandDetail() {
 
     return (
         <div className="container mt-4">
-            <h2 className="text-dark">Hand Detail</h2>
-
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // นำทางไปยังหน้าที่ก่อนหน้านี้
+                ></i>
+                 <h2 className="text-dark ms-3">ข้อมูลรายละเอียดมือ</h2>
+            </div>
             {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
             {handDetail ? (

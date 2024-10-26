@@ -28,22 +28,26 @@ function TarotPage() {
     );
 
     return (
-        <div className="container mt-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2 className="text-dark">รายการไพ่ Tarot</h2>
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="ค้นหาไพ่ Tarot..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm on input change
-                    style={{ width: '300px' }} // Adjust the width of the search box
-                />
+        <div className="container-fluid mt-4">
+            <div className="row mb-3">
+                <div className="col-12 col-md-6">
+                    <h2 className="text-dark">รายการไพ่ Tarot</h2>
+                </div>
+                <div className="col-12 col-md-6 d-flex justify-content-end">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="ค้นหาไพ่ Tarot..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{ maxWidth: '300px' }}
+                    />
+                </div>
             </div>
 
-            <div className="table-responsive">
-                <table className="table table-hover caption-top bg-light rounded mt-4 shadow-sm" style={{ width: '100%' }}>
-                    <thead className="table-light">
+            <div className="table-responsive" style={{ maxHeight: '650px', overflowY: 'auto' }}>
+                <table className="table table-hover caption-top bg-light rounded shadow-sm w-100">
+                    <thead className="table-light" style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Card Name</th>
@@ -80,19 +84,13 @@ function TarotPage() {
                                         <div className="d-flex justify-content-end">
                                             <button
                                                 className="btn btn-warning btn-sm me-2"
-                                                onClick={() => {
-                                                    console.log("Navigate to edit page:", `/edit-tarot-card/${card.Card_ID}`);
-                                                    navigate(`/edit-tarot-card/${card.Card_ID}`);
-                                                }}
+                                                onClick={() => navigate(`/edit-tarot-card/${card.Card_ID}`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 className="btn btn-danger btn-sm"
-                                                onClick={() => {
-                                                    console.log("Navigate to detail page:", `/data-tarot-card/${card.Card_ID}`);
-                                                    navigate(`/data-tarot-card/${card.Card_ID}`);
-                                                }}
+                                                onClick={() => navigate(`/data-tarot-card/${card.Card_ID}`)}
                                             >
                                                 Show
                                             </button>

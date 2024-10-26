@@ -55,7 +55,14 @@ function EditDataSummaryDetail() {
 
     return (
         <div className="container mt-5">
-            <h1>แก้ไขข้อมูลสรุป</h1>
+            <div className="d-flex align-items-center mb-4">
+                <i 
+                    className="bi bi-arrow-left ms-2" 
+                    style={{ fontSize: '1.5rem', cursor: 'pointer' }} 
+                    onClick={() => navigate(-1)} // นำทางไปยังหน้าที่ก่อนหน้านี้
+                ></i>
+                <h2 className="text-dark ms-3">แก้ไขข้อมูลสรุป</h2>
+            </div>
             {loading ? (
                 <div className="text-center">
                     <div className="spinner-border" role="status">

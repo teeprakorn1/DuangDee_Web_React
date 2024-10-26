@@ -45,7 +45,7 @@ function HandDetail() {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2 className="text-dark">Hand Detail</h2>
+                <h2 className="text-dark">ข้อมูลรายละเอียดมือ</h2>
                 <input 
                     type="text" 
                     className="form-control" 

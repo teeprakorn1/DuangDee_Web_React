@@ -14,6 +14,7 @@ function Home({ Toggle }) {
     const [playHandData, setPlayHandData] = useState([]);
     const [totalPlayCards, setTotalPlayCards] = useState(0);
     const [totalPlayHands, setTotalPlayHands] = useState(0);
+    const [totalPlaySummary, setTotalPlaySummary] = useState(0);
 
     // Define loading and error states here
     const [loading, setLoading] = useState(true);
@@ -40,13 +41,15 @@ function Home({ Toggle }) {
 
         const fetchPlayData = async () => {
             try {
-                const [playCardsResponse, playHandsResponse] = await Promise.all([
+                const [playCardsResponse, playHandsResponse, playSummaryResponse] = await Promise.all([
                     axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard`),
-                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand`)
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand`),
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playsummary`)
                 ]);
 
                 setTotalPlayCards(playCardsResponse.data.Count || 0);
                 setTotalPlayHands(playHandsResponse.data.Count || 0);
+                setTotalPlaySummary(playSummaryResponse.data.Count || 0);
             } catch (err) {
                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูลการเล่น:", err);
             }
@@ -54,23 +57,30 @@ function Home({ Toggle }) {
 
         const fetchMonthlyData = async () => {
             try {
-                const [cardResponse, handResponse] = await Promise.all([
-                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playcard-by-month`),
-                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/count-playhand-by-month`)
-                ]);
-
+                // ตัวแปรสำหรับเก็บค่า Count แต่ละเดือน
                 const playCardCounts = Array(12).fill(0);
                 const playHandCounts = Array(12).fill(0);
 
-                cardResponse.data.data.forEach(item => {
-                    playCardCounts[item.Month - 1] = item.Count;
-                });
-                handResponse.data.data.forEach(item => {
-                    playHandCounts[item.Month - 1] = item.Count;
-                });
+                // ลูปดึงข้อมูลสำหรับแต่ละเดือน
+                for (let month = 1; month <= 12; month++) {
+                    const requestPayload = { Month: month, Years: 2024 };
 
+                    // ส่งคำขอไปยัง API ด้วย POST method
+                    const cardResponse = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/count-playcard-date`, requestPayload);
+                    const handResponse = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/count-playhand-date`, requestPayload);
+
+                    // ดึงค่า Count จากผลลัพธ์ที่ได้รับและเก็บในตำแหน่งของเดือนนั้นๆ
+                    playCardCounts[month - 1] = cardResponse.data.Count || 0;
+                    playHandCounts[month - 1] = handResponse.data.Count || 0;
+                }
+
+                // ตั้งค่า state ให้กับ playCardData และ playHandData
                 setPlayCardData(playCardCounts);
                 setPlayHandData(playHandCounts);
+
+                // ตรวจสอบค่าที่ได้
+                console.log("playCardCounts:", playCardCounts);
+                console.log("playHandCounts:", playHandCounts);
             } catch (err) {
                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูลรายเดือน:", err);
             }
@@ -86,13 +96,15 @@ function Home({ Toggle }) {
 
     // ข้อมูลสำหรับ Pie Chart
     const pieData = {
-        labels: ["Play Cards", "Play Hands"],
+        labels: ["Play Cards", "Play Hands", "Play Summary"],
         datasets: [
             {
                 label: "Play Data",
-                data: [totalPlayCards, totalPlayHands],
-                backgroundColor: ["#36A2EB", "#FF6384"],
-                hoverBackgroundColor: ["#36A2EB", "#FF6384"],
+                data: [totalPlayCards, totalPlayHands, totalPlaySummary],
+                borderWidth: 1,
+                borderColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                hoverBackgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"]
             },
         ],
     };
