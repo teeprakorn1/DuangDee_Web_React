@@ -50,6 +50,7 @@ function AddAdmin() {
                         type="email"
                         className="form-control"
                         id="email"
+                        name="usersEmail"
                         value={usersEmail}
                         onChange={(e) => setUsersEmail(e.target.value)}
                         required
@@ -61,6 +62,7 @@ function AddAdmin() {
                         type="text"
                         className="form-control"
                         id="username"
+                        name="usersUsername"
                         value={usersUsername}
                         onChange={(e) => setUsersUsername(e.target.value)}
                         required
@@ -72,6 +74,7 @@ function AddAdmin() {
                         type="text"
                         className="form-control"
                         id="displayName"
+                        name="usersDisplayName"
                         value={usersDisplayName}
                         onChange={(e) => setUsersDisplayName(e.target.value)}
                         required
@@ -83,6 +86,7 @@ function AddAdmin() {
                         type="password"
                         className="form-control"
                         id="password"
+                        name="usersPassword"
                         value={usersPassword}
                         onChange={(e) => setUsersPassword(e.target.value)}
                         required
@@ -94,6 +98,7 @@ function AddAdmin() {
                         type="password"
                         className="form-control"
                         id="confirmPassword"
+                        name="confirmPassword"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required

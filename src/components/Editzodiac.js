@@ -136,6 +136,7 @@ function Editzodiac() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Zodiac_ID"
                                 value={Zodiac_ID} 
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
                                 readOnly
@@ -146,6 +147,7 @@ function Editzodiac() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Zodiac_Name"
                                 value={Zodiac_Name}
                                 onChange={(e) => setZodiacName(e.target.value)}
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
@@ -156,6 +158,7 @@ function Editzodiac() {
                             <label className="form-label" name="zodiacDetail">Zodiac Detail</label>
                             <textarea
                                 className="form-control"
+                                name="Zodiac_Detail"
                                 value={Zodiac_Detail}
                                 onChange={(e) => setZodiacDetail(e.target.value)}
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
@@ -167,6 +170,7 @@ function Editzodiac() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Zodiac_WorkTopic"
                                 value={Zodiac_WorkTopic}
                                 onChange={(e) => setZodiacWorkTopic(e.target.value)}
                                 required
@@ -177,6 +181,7 @@ function Editzodiac() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Zodiac_FinanceTopic"
                                 value={Zodiac_FinanceTopic}
                                 onChange={(e) => setZodiacFinanceTopic(e.target.value)}
                                 required
@@ -187,6 +192,7 @@ function Editzodiac() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Zodiac_LoveTopic"
                                 value={Zodiac_LoveTopic}
                                 onChange={(e) => setZodiacLoveTopic(e.target.value)}
                                 required
@@ -197,6 +203,7 @@ function Editzodiac() {
                             <input
                                 type="number"
                                 className="form-control"
+                                name="Zodiac_Score"
                                 value={Zodiac_Score}
                                 onChange={handleScoreChange} // ใช้ handleScoreChange แทน
                                 required
@@ -209,6 +216,7 @@ function Editzodiac() {
                                 <input
                                     type="text"
                                     className="form-control me-2"
+                                    name="Zodiac_ImageFile"
                                     value={Zodiac_ImageFile}
                                     readOnly
                                     placeholder="เลือกรูปภาพ..."

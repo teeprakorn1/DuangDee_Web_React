@@ -82,7 +82,6 @@ function EditCustomer() {
             setPhoneError('หมายเลขโทรศัพท์ต้องเป็น 10 หลัก');
             return;
         }
-        const formattedBirthDate = Users_BirthDate ? new Date(Users_BirthDate).toISOString().split('T')[0] : '';
 
         const updatedCustomer = {
             Users_ID,
@@ -150,13 +149,14 @@ function EditCustomer() {
             {loading ? (
                 <p>กำลังโหลดข้อมูล...</p>
             ) : (
-                <div style={{ height: '80vh', overflowY: 'auto' }}>
+                <div style={{ height: '70vh', overflowY: 'auto' }}>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label className="form-label">User ID</label>
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_ID"
                                 value={Users_ID}
                                 onChange={(e) => setUserID(e.target.value)}
                                 required
@@ -169,6 +169,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_Username"
                                 value={Users_Username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -181,6 +182,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_DisplayName"
                                 value={Users_DisplayName}
                                 onChange={(e) => setDisplayName(e.target.value)}
                                 required
@@ -191,6 +193,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_FirstName"
                                 value={Users_FirstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 required
@@ -201,6 +204,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_LastName"
                                 value={Users_LastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 required
@@ -211,6 +215,7 @@ function EditCustomer() {
                             <input
                                 type="email"
                                 className="form-control"
+                                name="Users_Email"
                                 value={Users_Email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -223,6 +228,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_Phone"
                                 value={Users_Phone}
                                 onChange={handlePhoneChange}
                                 required
@@ -234,6 +240,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_BirthDate"
                                 value={Users_BirthDate}
                                 onChange={(e) => setBirthDate(e.target.value)}
                                 readOnly
@@ -246,6 +253,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_RegisDate"
                                 value={Users_RegisDate}
                                 readOnly
                                 style={{ backgroundColor: '#e9ecef', color: '#495057' }}
@@ -265,6 +273,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="Users_Google_Uid"
                                 value={Users_Google_Uid}
                                 onChange={(e) => setGoogle_Uid(e.target.value)}
                                 required
@@ -292,6 +301,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="RegisType_Name"
                                 value={RegisType_Name}
                                 onChange={(e) => setRegisType_Name(e.target.value)}
                                 readOnly
@@ -304,6 +314,7 @@ function EditCustomer() {
                             <input
                                 type="text"
                                 className="form-control"
+                                name="UsersType_Name"
                                 value={UsersType_Name}
                                 onChange={(e) => setUsersType_Name(e.target.value)}
                                 readOnly
@@ -315,6 +326,7 @@ function EditCustomer() {
                             <label className="form-label">Is Active</label>
                             <select
                                 className="form-select"
+                                name="Users_IsActive"
                                 value={Users_IsActive}
                                 onChange={(e) => setIsActive(e.target.value)}
                                 required
