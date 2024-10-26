@@ -107,7 +107,7 @@ function Editzodiac() {
 
             // ใช้ navigate เพื่อเปลี่ยนหน้าไปที่ /zodiac แทนการ reload
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
-            navigate(`/edit-zodiac`); // เปลี่ยนเส้นทางไปยังหน้ารายการ Zodiac 
+            navigate(`/zodiac`); // เปลี่ยนเส้นทางไปยังหน้ารายการ Zodiac 
 
         } catch (error) {
             setError("Error updating zodiac data.");
