@@ -28,7 +28,15 @@ function Showdatacustomer() {
 
     const fetchCustomer = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             const data = response.data;
             setUserID(data.Users_ID);
             setUsername(data.Users_Username);
@@ -52,6 +60,7 @@ function Showdatacustomer() {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchCustomer();

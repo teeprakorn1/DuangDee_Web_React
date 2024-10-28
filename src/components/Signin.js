@@ -42,6 +42,7 @@ export default function SignIn({ onSignin }) {
 
       const result = response.data;
       if (result.status) {
+        localStorage.setItem("authToken", result.token);
         onSignin(); // เรียกฟังก์ชันการเข้าสู่ระบบจาก props
       } else {
         setError(result.message); // แสดงข้อความผิดพลาด

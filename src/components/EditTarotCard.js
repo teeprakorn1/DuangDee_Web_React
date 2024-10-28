@@ -23,7 +23,15 @@ function EditTarotCard() {
     // Using useCallback to memoize the fetchCardDetails function
     const fetchCardDetails = useCallback(async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             const data = response.data;
             setCardName(data.Card_Name);
             setCardWorkTopic(data.Card_WorkTopic);
@@ -40,6 +48,7 @@ function EditTarotCard() {
             setLoading(false);
         }
     }, [id]);
+    
 
     useEffect(() => {
         fetchCardDetails();
@@ -61,6 +70,15 @@ function EditTarotCard() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+        // ตรวจสอบว่ามี Token หรือไม่
+        if (!token) {
+            console.error("Token is missing");
+            setError("Token is missing. Please login again.");
+            return;
+        }
+    
         const updatedCard = {
             Card_Name,
             Card_WorkTopic,
@@ -72,16 +90,23 @@ function EditTarotCard() {
         };
     
         try {
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card/${id}`, updatedCard);
+            // ส่งคำขอ PUT เพื่ออัปเดตการ์ด
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card/${id}`, updatedCard, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
     
             if (selectedFile) {
                 const formData = new FormData();
                 formData.append('Card_Image', selectedFile);
     
+                // ส่งคำขอ PUT เพื่ออัปเดตรูปภาพ
                 const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-card-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                    },
+                        'x-access-token': token // เพิ่ม Token ใน Header
+                    }
                 });
     
                 if (putImageResponse.data.status !== true) {
@@ -89,20 +114,25 @@ function EditTarotCard() {
                     return;
                 }
     
+                // ส่งคำขอ DELETE เพื่อลบรูปภาพเก่า
                 await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-card-image/${id}`, {
                     data: { imagePath: Card_ImageFile },
+                    headers: {
+                        'x-access-token': token // เพิ่ม Token ใน Header
+                    }
                 });
             }
     
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate(`/tarot`);
-
+    
         } catch (error) {
             setError("Error updating tarot card.");
             console.error("Error updating tarot card:", error);
         }
     };
+    
 
     return (
         <div className="container mt-4" style={{ height: '80vh', overflowY: 'auto' }}>

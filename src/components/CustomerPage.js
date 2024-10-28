@@ -10,13 +10,21 @@ function CustomerPage() {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             console.log("Fetched customers:", response.data); 
             setCustomers(response.data);
         } catch (error) {
             console.error("Error fetching customers:", error);
         }
     };
+    
     
     useEffect(() => {
         fetchCustomers();

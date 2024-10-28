@@ -17,7 +17,14 @@ function EditHandDetail() {
 
     const fetchHandDetail = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-handdetail/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-handdetail/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             if (response.data) {
                 setHandDetail(response.data);
             } else {
@@ -28,6 +35,7 @@ function EditHandDetail() {
             setErrorMessage('เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
     };
+    
 
     useEffect(() => {
         fetchHandDetail();
@@ -52,8 +60,24 @@ function EditHandDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+        // ตรวจสอบว่ามี Token หรือไม่
+        if (!token) {
+            console.error("Token is missing");
+            setErrorMessage('Token is missing. Please login again.');
+            return;
+        }
+    
         try {
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-handdetail/${id}`, handDetail);
+            // ส่งคำขอ PUT พร้อม Header Token
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-handdetail/${id}`, handDetail, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate('/hand-detail');
@@ -62,6 +86,7 @@ function EditHandDetail() {
             setErrorMessage('เกิดข้อผิดพลาดในการอัปเดตข้อมูล');
         }
     };
+    
 
     return (
         <div className="container mt-4">

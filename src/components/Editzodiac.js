@@ -22,7 +22,15 @@ function Editzodiac() {
 
     const fetchzodiac = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-zodiac/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-zodiac/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             const data = response.data;
             setZodiacID(data.Zodiac_ID); // ตั้งค่า Zodiac ID
             setZodiacName(data.Zodiac_Name);
@@ -39,6 +47,7 @@ function Editzodiac() {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchzodiac();
@@ -61,6 +70,8 @@ function Editzodiac() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("authToken");
+
         const updatedZodiac = {
             Zodiac_Name,
             Zodiac_Detail,
@@ -71,29 +82,44 @@ function Editzodiac() {
         };
 
         try {
-            // 1. อัปเดตข้อมูล Zodiac
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-zodiac/${id}`, updatedZodiac);
-            
-            // 2. ตรวจสอบว่ามีไฟล์ใหม่หรือไม่
+            // Step 1: Update Zodiac information
+            const updateResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-zodiac/${id}`, updatedZodiac, {
+                headers: {
+                    'x-access-token': token
+                }
+            });
+
+            if (updateResponse.data.status !== true) {
+                throw new Error("ไม่สามารถอัพเดทข้อมูลราศีได้.");
+            }
+
+            // Step 2: Handle image upload if a new file is selected
             if (selectedFile) {
                 const formData = new FormData();
-                formData.append('Zodiac_Image', selectedFile); // เพิ่มไฟล์ใหม่ที่ถูกเลือก
+                formData.append('Zodiac_Image', selectedFile);
 
                 const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-Zodiac-image/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
+                        'x-access-token': token
                     },
                 });
 
-                // 3. ตรวจสอบว่าการอัปโหลดสำเร็จหรือไม่
                 if (putImageResponse.data.status === true) {
-                    // ส่งคำสั่งลบไฟล์เก่า
-                    const deleteData = { imagePath: Zodiac_ImageFile }; // ส่งชื่อไฟล์ที่ต้องการลบ
-    
+                    const deleteData = { imagePath: Zodiac_ImageFile };
                     try {
-                        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-zodiac-image/${id}`, { data: deleteData });
+                        const deleteResponse = await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-zodiac-image/${id}`, {
+                            data: deleteData,
+                            headers: {
+                                'x-access-token': token
+                            }
+                        });
+
+                        if (deleteResponse.data.status !== true) {
+                            throw new Error("ไม่สามารถลบภาพเก่าได้.");
+                        }
                     } catch (deleteError) {
-                        console.error("Error deleting image:", deleteError.response?.data || deleteError.message);
+                        console.error("Error deleting old image:", deleteError);
                         setError("ไม่สามารถลบภาพเก่าได้.");
                         return;
                     }
@@ -102,18 +128,17 @@ function Editzodiac() {
                     return;
                 }
             }
-    
+
             setSuccess(true);
-
-            // ใช้ navigate เพื่อเปลี่ยนหน้าไปที่ /zodiac แทนการ reload
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
-            navigate(`/zodiac`); // เปลี่ยนเส้นทางไปยังหน้ารายการ Zodiac 
-
+            navigate(`/zodiac`);
         } catch (error) {
-            setError("Error updating zodiac data.");
             console.error("Error updating zodiac:", error);
+            setError(error.message || "Error updating zodiac data.");
         }
     };
+    
+    
 
     return (
         <div className="container mt-4">

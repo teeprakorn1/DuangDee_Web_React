@@ -15,7 +15,21 @@ function EditDataSummaryDetail() {
 
     const fetchSummaryDetail = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-summarydetail/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+            // ตรวจสอบว่ามี Token หรือไม่
+            if (!token) {
+                console.error("Token is missing");
+                return;
+            }
+    
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-summarydetail/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             setSummaryDetail(response.data);
         } catch (error) {
             setError("Error fetching summary detail.");
@@ -24,6 +38,7 @@ function EditDataSummaryDetail() {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchSummaryDetail();
@@ -32,12 +47,21 @@ function EditDataSummaryDetail() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { SummaryDetail_Name, SummaryDetail_Detail, SummaryDetail_MinPercent } = summaryDetail;
+        
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
         try {
+            // ส่งคำขอ PUT พร้อม Header Token
             const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-summarydetail/${id}`, {
                 SummaryDetail_Name,
                 SummaryDetail_Detail,
                 SummaryDetail_MinPercent,
+            }, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
             });
+    
             setSuccess(true);
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             navigate('/summary-detail');
@@ -45,6 +69,7 @@ function EditDataSummaryDetail() {
             console.error("Error updating summary detail:", error);
         }
     };
+    
     const handleMinPercentChange = (e) => {
         const value = e.target.value; // ค่าที่ผู้ใช้กรอก
         // ตรวจสอบว่าค่าที่กรอกเป็นค่าว่างหรืออยู่ในช่วง 0 ถึง 100

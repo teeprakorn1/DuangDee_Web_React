@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function EditCustomer() {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [Users_ID, setUserID] = useState('');
@@ -29,8 +29,18 @@ function EditCustomer() {
     const [phoneError, setPhoneError] = useState('');
 
     const fetchCustomer = useCallback(async () => {
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+        console.log("Token:", token); // ตรวจสอบค่า Token
+    
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-profile-web/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
+            console.log("API Response:", response.data); // ตรวจสอบการตอบกลับจาก API
+    
             const data = response.data;
             setUserID(data.Users_ID || '');
             setUsername(data.Users_Username || '');
@@ -40,7 +50,7 @@ function EditCustomer() {
             setEmail(data.Users_Email || '');
             setPhone(data.Users_Phone || '');
             setBirthDate(data.Users_BirthDate ? data.Users_BirthDate.split('T')[0] : '');
-            setRegisDate(data.Users_RegisDate ? data.Users_RegisDate.split('T')[0] : '')
+            setRegisDate(data.Users_RegisDate ? data.Users_RegisDate.split('T')[0] : '');
             setImageFile(data.Users_ImageFile || '');
             setGoogle_Uid(data.Users_Google_Uid || '');
             setGender_ID(data.UsersGender_ID || '');
@@ -54,6 +64,7 @@ function EditCustomer() {
             setLoading(false);
         }
     }, [id]);
+    
 
     useEffect(() => {
         fetchCustomer();
@@ -82,40 +93,50 @@ function EditCustomer() {
             setPhoneError('หมายเลขโทรศัพท์ต้องเป็น 10 หลัก');
             return;
         }
-
+    
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
         const updatedCustomer = {
-            Users_ID,
-            Users_Username,
             Users_DisplayName,
             Users_FirstName,
             Users_LastName,
-            Users_Email,
             Users_Phone,
             Users_BirthDate,
-            Users_RegisDate,
-            Users_ImageFile,
-            Users_Google_Uid,
             UsersGender_ID,
-            RegisType_Name,
-            UsersType_Name,
             Users_IsActive
-        };
-
+          };
+          
+    
         try {
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-web/${id}`, updatedCustomer);
-            
+            // PUT คำขอแรกเพื่ออัปเดตโปรไฟล์
+            const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-web/${id}`, updatedCustomer, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             if (selectedFile) {
                 const formData = new FormData();
                 formData.append('Profile_Image', selectedFile);
-
-                const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-image/${id}`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
+    
+                // PUT คำขอที่สองเพื่ออัปโหลดรูปภาพ
+                const putImageResponse = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/update-profile-image-web/${id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'x-access-token': token // เพิ่ม Token ใน Header
+                    }
                 });
-
+    
                 if (putImageResponse.data.status === true) {
                     const deleteData = { imagePath: Users_ImageFile };
                     try {
-                        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-profile-image/${id}`, { data: deleteData });
+                        // DELETE คำขอเพื่อลบรูปภาพเก่า
+                        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/delete-profile-image/${id}`, {
+                            data: deleteData,
+                            headers: {
+                                'x-access-token': token // เพิ่ม Token ใน Header
+                            }
+                        });
                     } catch (deleteError) {
                         console.error("Error deleting image:", deleteError.response?.data || deleteError.message);
                         setError("ไม่สามารถลบภาพเก่าได้.");
@@ -126,15 +147,17 @@ function EditCustomer() {
                     return;
                 }
             }
-
+    
             setSuccess(true);
-            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
+            alert(response.data.message);
             navigate('/customer');
         } catch (error) {
             setError("Error updating customer data.");
             console.error("Error updating customer:", error);
         }
     };
+    
+    
 
     return (
         <div className="container mt-4">

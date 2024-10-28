@@ -12,20 +12,28 @@ function AddAdmin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         // ตรวจสอบว่ารหัสผ่านและ Confirm Password ตรงกันหรือไม่
         if (usersPassword !== confirmPassword) {
             setMessage("รหัสผ่านไม่ตรงกัน");
             return;
         }
-
+    
+        const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
         try {
+            // ส่งคำขอ POST พร้อม Header Token
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/admin-add`, {
                 Users_Email: usersEmail,
                 Users_Username: usersUsername,
                 Users_DisplayName: usersDisplayName,
                 Users_Password: usersPassword,
+            }, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
             });
+    
             setMessage(response.data.message);
             // Reset form fields
             setUsersEmail('');
@@ -38,7 +46,7 @@ function AddAdmin() {
             setMessage("เกิดข้อผิดพลาดในการลงทะเบียน Admin");
         }
     };
-
+    
     return (
         <div className="container mt-4">
             <h2>เพิ่ม Admin</h2>

@@ -13,7 +13,15 @@ function Showdatatarot() {
     // ฟังก์ชันดึงข้อมูลการ์ด
     const fetchCardDetails = useCallback(async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card/${id}`);
+            const token = localStorage.getItem("authToken"); // ดึง Token จาก localStorage
+    
+            // ส่งคำขอ GET พร้อม Header Token
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/get-card/${id}`, {
+                headers: {
+                    'x-access-token': token // เพิ่ม Token ใน Header
+                }
+            });
+    
             if (response.data) {
                 setCardDetails(response.data);
             } else {
@@ -26,6 +34,7 @@ function Showdatatarot() {
             setLoading(false);
         }
     }, [id]);
+    
 
     useEffect(() => {
         fetchCardDetails();
