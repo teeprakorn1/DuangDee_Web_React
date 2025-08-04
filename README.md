@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# 🔮 DuangDee Android App (Website Admin)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**DuangDee** is a fortune-telling Android application developed using **Kotlin**, designed to deliver various types of spiritual predictions including **palmprint reading**, **tarot card reading**, and **birthday-based forecasts**. The app also provides **daily horoscope results** with a user-friendly interface.
 
-## Available Scripts
+This project was developed as part of a university assignment in **Year 3, Semester 1**.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ✋ **Palmprint Prediction** – Capture palm images and get predictions using a machine learning model
+- 🃏 **Tarot Card Reading** – Draw cards and receive spiritual insights
+- 🎂 **Birthday Horoscope** – Analyze zodiac-based predictions using birth date
+- 📅 **Daily Horoscope** – Daily astrological summary personalized for the user
+- 👤 User authentication and profile system with **Firebase OAuth login**
+- 🔐 Token encryption for every API request to enhance security
+- 📧 Password reset via email functionality
+- 🛡️ Rate limiting and XSS protection implemented in the Node.js backend
+- 🔗 Connects to backend APIs and ML models
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ⚙️ System Architecture
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The DuangDee system is divided into **4 major components**, each responsible for a specific part of the application:
 
-### `npm run build`
+| Component           | Description |
+|---------------------|-------------|
+| **📱 Mobile Frontend (Kotlin)** | Android application developed using Kotlin and Jetpack libraries. Responsible for user interaction, UI display, with backend and AI services. |
+| **🌐 Backend API (Node.js)** | RESTful API server built with Node.js and Express. Handles user authentication (including Firebase OAuth), profile management, tarot logic, birthday horoscope, and daily fortune content. Implements token encryption, rate limiting, and XSS protection. |
+| **🧠 AI Engine (Python)** | Python-based microservice (Flask) that processes palmprint images using an ML model (OpenCV / TensorFlow). Receives images from mobile app and returns predictions. |
+| **🖥️ Web Admin (React.js)** | Web-based admin dashboard built with React. Allows admins to manage users, tarot cards, and horoscope content. Node.js backend. |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> All components are loosely coupled and communicate via REST APIs.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🧰 Tech Stack
 
-### `npm run eject`
+### 💻 Frontend (Android)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Kotlin
+- ViewModel, LiveData, Retrofit2
+- Coroutines for asynchronous tasks
+- Glide for image loading
+- Material Design UI components
+- **Designed with Figma**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🌐 Backend (API)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Node.js + Express
+- Firebase OAuth Authentication integration
+- JWT Token encryption for every request
+- Password reset email system
+- Rate limiting to prevent abuse
+- XSS attack protection
+- MySQL
+- REST API for horoscope, tarot, and user handling
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🖥️ Web Admin Panel
 
-## Learn More
+An additional **Admin Dashboard** is developed using **React.js** to manage the backend data:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Manage users, horoscopes, and tarot card sets
+- View palmprint submission logs
+- Admin authentication
+- Built using React + Tailwind CSS
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🎓 Academic Context
 
-### Code Splitting
+This full system was developed as part of a **third-year university project (Semester 1)**.  
+It demonstrates skills in:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Cross-platform system design
+- Full-stack development
+- Mobile-to-ML integration
+- UI/UX design with Figma
+- Automated testing with Robot Framework
 
-### Analyzing the Bundle Size
+### 🧠 AI Module
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Python (Flask)
+- OpenCV or TensorFlow/Keras (for palmprint analysis)
+- Trained model hosted separately from backend server
 
-### Making a Progressive Web App
+## 🧪 Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The system is tested using the following tools:
 
-### Advanced Configuration
+- 🤖 **Robot Framework** – Used for writing acceptance tests in a readable syntax
+- 🌐 **SeleniumLibrary** – Automates UI testing for both mobile and web interfaces
+- ✅ Tests cover:
+  - User login & registration flows
+  - Fortune prediction flows (palmprint, tarot, birthday)
+  - UI navigation and backend API response validation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+> All automated tests are written in `.robot` files and can be run with a single command.
